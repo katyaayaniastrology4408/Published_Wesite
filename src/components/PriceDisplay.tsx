@@ -20,38 +20,35 @@ export function PriceDisplay({ amount, className = "", showBadge = true, showUrg
     return <span className={`font-black ${className}`}>₹ {amount}</span>;
   }
 
-  // Check if we should show the offer display
+  // Check if the amount passed is related to this offer (851 or 501)
   const isTargetAmount = Number(amount) === offer.original_price || Number(amount) === offer.offer_price;
+  
   if (!isTargetAmount) {
     return <span className={`font-black ${className}`}>₹ {amount}</span>;
   }
 
-  const showStrikeThrough = Number(amount) === offer.original_price;
-
-  // Offer is valid! Show badge and possibly strike-through.
+  // Always show BOTH original (cut) and offer price for maximum impact
   return (
     <div className="flex flex-col items-start gap-1">
-      <div className="flex items-center gap-2">
-        {showStrikeThrough && (
-          <span className={`text-sm line-through ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
-            ₹{offer.original_price}
-          </span>
-        )}
-        <span className={`font-black text-red-500 ${className}`}>
+      <div className="flex items-center gap-3 flex-wrap">
+        <span className={`text-sm line-through decoration-red-500 decoration-2 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'} font-medium`}>
+          ₹{offer.original_price}
+        </span>
+        <span className={`font-black text-[#ff6b35] ${className} drop-shadow-sm`}>
           ₹{offer.offer_price}
         </span>
       </div>
       
       {showBadge && (
-        <div className="flex items-center gap-1 mt-0.5 bg-red-500/10 text-red-500 text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-sm border border-red-500/20">
+        <div className="flex items-center gap-1 mt-0.5 bg-[#ff6b35]/10 text-[#ff6b35] text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md border border-[#ff6b35]/20">
           <Flame className="w-3 h-3" />
-          <span>{offer.title || `Special Offer – Only for First ${offer.max_slots} Users`}</span>
+          <span>{offer.title || `SPECIAL OFFER`}</span>
         </div>
       )}
 
       {showUrgency && (
-        <span className="text-[10px] text-red-500 font-bold tracking-wider mt-0.5 animate-pulse">
-          ⚡ Only {Math.max(0, offer.max_slots - offer.used_slots)} Slots Left
+        <span className="text-[10px] text-[#ff6b35] font-black tracking-wider mt-0.5 animate-pulse">
+          ⚡ ONLY {Math.max(0, offer.max_slots - offer.used_slots)} SLOTS LEFT
         </span>
       )}
     </div>

@@ -123,7 +123,7 @@ export function OfferPopup() {
 
                 <div className="flex items-center justify-center gap-3 mb-5 bg-black/20 py-2.5 px-4 rounded-xl backdrop-blur-sm border border-white/20">
                     <div className="text-right">
-                        <span className="text-xs text-white/70 line-through block">₹{offer.original_price}</span>
+                        <span className="text-xs text-white/70 line-through decoration-yellow-400 decoration-2 block">₹{offer.original_price}</span>
                         <span className="text-2xl font-black text-yellow-300 drop-shadow-sm leading-none">₹{offer.offer_price}</span>
                     </div>
                 </div>
