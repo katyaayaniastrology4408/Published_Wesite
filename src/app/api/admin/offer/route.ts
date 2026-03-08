@@ -18,24 +18,65 @@ export async function GET() {
       .single();
 
     if (error) {
-        // Table exists but no rows
-        return NextResponse.json({
-          success: true,
-          data: {
-            is_active: false,
-            start_date: null,
-            end_date: null,
-            original_price: 851,
-            offer_price: 501,
-            title: "🎉 Special Festival Offer",
-            urgency_text: "Only Few Slots Left",
-            popup_text: "🎉 Special Festival Offer – Book Now at ₹501 Only!",
-            max_slots: 50,
-            used_slots: 0,
-            payment_link: "https://urpy.link/D9kGay"
-          }
-        });
-      return NextResponse.json({ error: error.message }, { status: 500 });
+        // Handle case where table exists but row 1 is missing
+        if (error.code === 'PGRST116') {
+            const defaultOffer = {
+                id: 1,
+                is_active: true,
+                start_date: new Date().toISOString(),
+                end_date: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString(), // ~6 months
+                original_price: 851,
+                offer_price: 501,
+                title: "First 50 Users Special Offer",
+                urgency_text: "Only Few Slots Left",
+                popup_text: "🎉 Special Festival Offer – Book Now at ₹501 Only!",
+                max_slots: 50,
+                used_slots: 0,
+                payment_link: "https://urpy.link/D9kGay"
+            };
+            
+            const { data: insertedData, error: insertError } = await supabase
+                .from("offer_settings")
+                .insert(defaultOffer)
+                .select()
+                .single();
+            
+            if (insertError) {
+                // If it's a schema error, return but don't crash
+                if (insertError.message.includes("relation \"offer_settings\" does not exist")) {
+                    return NextResponse.json({ 
+                        success: false, 
+                        error: "Table 'offer_settings' missing. Please run the SQL setup script.", 
+                        data: defaultOffer 
+                    });
+                }
+                return NextResponse.json({ error: insertError.message }, { status: 500 });
+            }
+            return NextResponse.json({ success: true, data: insertedData });
+        }
+        
+        // Handle generic missing table error
+        if (error.message.includes("relation \"offer_settings\" does not exist")) {
+            return NextResponse.json({ 
+                success: false, 
+                error: "Table 'offer_settings' missing. Please run the SQL setup script.",
+                data: {
+                    is_active: true,
+                    start_date: new Date().toISOString(),
+                    end_date: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString(),
+                    original_price: 851,
+                    offer_price: 501,
+                    title: "First 50 Users Special Offer",
+                    urgency_text: "Only Few Slots Left",
+                    popup_text: "🎉 Special Festival Offer – Book Now at ₹501 Only!",
+                    max_slots: 50,
+                    used_slots: 0,
+                    payment_link: "https://urpy.link/D9kGay"
+                }
+            });
+        }
+        
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
     // Auto-disable if end date is passed

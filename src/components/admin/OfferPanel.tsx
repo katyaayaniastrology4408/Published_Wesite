@@ -24,14 +24,14 @@ interface OfferSettings {
 
 export default function OfferPanel({ isDark, t, setSuccess, setError }: any) {
   const [settings, setSettings] = useState<OfferSettings>({
-    is_active: false,
-    start_date: null,
-    end_date: null,
+    is_active: true,
+    start_date: new Date().toISOString().slice(0, 16),
+    end_date: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16),
     original_price: 851,
     offer_price: 501,
-    title: "🎉 Special Festival Offer",
+    title: "First 50 Users Special Offer",
     urgency_text: "Only Few Slots Left",
-    popup_text: "Book Now at ₹501 Only!",
+    popup_text: "🎉 Special Festival Offer – Book Now at ₹501 Only!",
     max_slots: 50,
     used_slots: 0,
     payment_link: "https://urpy.link/D9kGay"
