@@ -83,7 +83,7 @@ INSERT INTO public.offer_settings (
       return NextResponse.json({ success: false, error: error.message });
     }
 
-    return NextResponse.json({ success: true, message: "Column removed successfully for security" });
+    return NextResponse.json({ success: true, message: "Database reset and ₹501 offer activated for fresh start!" });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message });
   }

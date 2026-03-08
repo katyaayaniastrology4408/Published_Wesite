@@ -352,7 +352,6 @@ export default function OfferPanel({ isDark, t, setSuccess, setError }: any) {
               {settings.is_active ? (
                 <>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm md:text-base text-muted-foreground line-through font-medium">₹{settings.original_price}</span>
                     <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-red-500 to-orange-500 text-transparent bg-clip-text">
                       ₹{settings.offer_price}
                     </span>
@@ -385,7 +384,6 @@ export default function OfferPanel({ isDark, t, setSuccess, setError }: any) {
                 </h3>
                 
                 <div className="flex items-baseline gap-2 mb-4">
-                  <span className="text-muted-foreground line-through text-sm">₹{settings.original_price}</span>
                   <span className="text-3xl font-black text-red-500">₹{settings.offer_price}</span>
                 </div>
                 
