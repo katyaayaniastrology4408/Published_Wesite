@@ -18,9 +18,10 @@ export async function GET() {
       .single();
 
     if (error) {
-      if (error.code === 'PGRST116') {
         // Table exists but no rows
         return NextResponse.json({
+          success: true,
+          data: {
             is_active: false,
             start_date: null,
             end_date: null,
@@ -32,8 +33,8 @@ export async function GET() {
             max_slots: 50,
             used_slots: 0,
             payment_link: "https://urpy.link/D9kGay"
+          }
         });
-      }
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
