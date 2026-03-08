@@ -5,8 +5,7 @@ import dynamic from "next/dynamic";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useTranslation } from "@/components/GoogleTranslateWidget";
 import { Card, CardContent } from "@/components/ui/card";
-import Star from "lucide-react/dist/esm/icons/star";
-import Loader2 from "lucide-react/dist/esm/icons/loader2";
+import { Star, Loader2 } from "lucide-react";
 import Navbar from "@/components/homepage/Navbar";
 
 const Footer = dynamic(() => import("@/components/homepage/Footer"), { ssr: false });

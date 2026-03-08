@@ -4,19 +4,21 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import NextImage from "next/image";
 import dynamic from "next/dynamic";
-import Star from "lucide-react/dist/esm/icons/star";
-import Moon from "lucide-react/dist/esm/icons/moon";
-import Sun from "lucide-react/dist/esm/icons/sun";
-import Sparkles from "lucide-react/dist/esm/icons/sparkles";
-import House from "lucide-react/dist/esm/icons/house";
-import Video from "lucide-react/dist/esm/icons/video";
-import ChevronRight from "lucide-react/dist/esm/icons/chevron-right";
-import ChevronDown from "lucide-react/dist/esm/icons/chevron-down";
-import Calendar from "lucide-react/dist/esm/icons/calendar";
-import Newspaper from "lucide-react/dist/esm/icons/newspaper";
-import Bell from "lucide-react/dist/esm/icons/bell";
-import ArrowRight from "lucide-react/dist/esm/icons/arrow-right";
-import X from "lucide-react/dist/esm/icons/x";
+import { 
+  Star, 
+  Moon, 
+  Sun, 
+  Sparkles, 
+  House, 
+  Video, 
+  ChevronRight, 
+  ChevronDown, 
+  Calendar, 
+  Newspaper, 
+  Bell, 
+  ArrowRight, 
+  X 
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useTheme } from "@/contexts/ThemeContext";

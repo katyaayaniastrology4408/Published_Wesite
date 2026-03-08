@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import Menu from "lucide-react/dist/esm/icons/menu";
-import X from "lucide-react/dist/esm/icons/x";
-import LogOut from "lucide-react/dist/esm/icons/log-out";
-import Moon from "lucide-react/dist/esm/icons/moon";
-import Sun from "lucide-react/dist/esm/icons/sun";
-import Bell from "lucide-react/dist/esm/icons/bell";
+import { 
+  Menu, 
+  X, 
+  LogOut, 
+  Moon, 
+  Sun, 
+  Bell 
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useMenu } from "@/contexts/MenuContext";
