@@ -28,8 +28,8 @@ export async function GET() {
                 original_price: 851,
                 offer_price: 501,
                 title: "First 50 Users Special Offer",
-                urgency_text: "Only Few Slots Left",
-                popup_text: "🎉 Special Festival Offer – Book Now at ₹501 Only!",
+                urgency_text: "Only 50 Slots Available",
+                popup_text: "🎉 First 50 Users Offer – Book Now at ₹501 Only!",
                 max_slots: 50,
                 used_slots: 0,
                 payment_link: "https://urpy.link/D9kGay"
@@ -67,8 +67,8 @@ export async function GET() {
                     original_price: 851,
                     offer_price: 501,
                     title: "First 50 Users Special Offer",
-                    urgency_text: "Only Few Slots Left",
-                    popup_text: "🎉 Special Festival Offer – Book Now at ₹501 Only!",
+                    urgency_text: "Only 50 Slots Available",
+                    popup_text: "🎉 First 50 Users Offer – Book Now at ₹501 Only!",
                     max_slots: 50,
                     used_slots: 0,
                     payment_link: "https://urpy.link/D9kGay"

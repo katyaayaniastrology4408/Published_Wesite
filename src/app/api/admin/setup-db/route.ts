@@ -57,9 +57,9 @@ ALTER TABLE public.reviews ENABLE ROW LEVEL SECURITY;
 
 -- 5. Insert default offer (₹501, 6 months)
 INSERT INTO public.offer_settings (
-    id, is_active, title, max_slots, used_slots, offer_price, original_price, start_date, end_date
+    id, is_active, title, max_slots, used_slots, offer_price, original_price, start_date, end_date, urgency_text, popup_text
 ) VALUES (
-    1, true, 'First 50 Users Special Offer', 50, 0, 501, 851, NOW(), NOW() + INTERVAL '6 months'
+    1, true, 'First 50 Users Special Offer', 50, 0, 501, 851, NOW(), NOW() + INTERVAL '6 months', 'Only 50 Slots Available', '🎉 First 50 Users Offer – Book Now at ₹501 Only!'
 ) ON CONFLICT (id) DO UPDATE SET
     is_active = true,
     title = 'First 50 Users Special Offer',
@@ -68,7 +68,9 @@ INSERT INTO public.offer_settings (
     offer_price = 501,
     original_price = 851,
     start_date = NOW(),
-    end_date = NOW() + INTERVAL '6 months';
+    end_date = NOW() + INTERVAL '6 months',
+    urgency_text = 'Only 50 Slots Available',
+    popup_text = '🎉 First 50 Users Offer – Book Now at ₹501 Only!';
     `;
 
     const { error } = await supabaseAdmin.rpc('exec_sql', {
