@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Star, Moon, Sun, Sparkles, Home, Building2, Video, 
+import {
+  Star, Moon, Sun, Sparkles, Home, Building2, Video,
   CheckCircle, Clock, IndianRupee, MapPin
 } from "lucide-react";
 import Navbar from "@/components/homepage/Navbar";
@@ -130,51 +130,51 @@ const services = [
       ]
     }
   },
-    {
-      icon: Video,
-      title: "Online Consultation",
-      titleHi: "ऑनलाइन परामर्श",
-      titleGu: "ઓનલાઇન પરામર્શ",
-      description: "Connect with us from anywhere in the world via video call. Get your our readings from the comfort of your home.",
-      descriptionHi: "वीडियो कॉल के माध्यम से दुनिया में कहीं से भी हमसे जुड़ें। अपने घर के आराम से अपनी हमारे रीडिंग प्राप्त करें।",
-      descriptionGu: "વીડિયો કોલ દ્વારા વિશ્વના કોઈપણ સ્થળેથી અમારી સાથે જોડાઓ. તમારા ઘરની આરામથી તમારી અમારા રીડિંગ્સ મેળવો.",
-      price: "501",
-      duration: "45 minutes",
-      durationHi: "45 मिनट",
-      durationGu: "45 મિનિટ",
-      features: {
-        en: [
-          "Video/Audio call consultation",
-          "Global accessibility",
-          "Digital chart sharing",
-          "Concise chart analysis",
-          "Specific query resolution",
-          "Digital remedy report"
-        ],
-        hi: [
-          "वीडियो/ऑडियो कॉल परामर्श",
-          "वैश्विक पहुंच",
-          "डिजिटल चार्ट साझाकरण",
-          "संक्षिप्त चार्ट विश्लेषण",
-          "विशिष्ट प्रश्न समाधान",
-          "डिजिटल उपाय रिपोर्ट"
-        ],
-        gu: [
-          "વીડિયો/ઓડિયો કોલ પરામર્શ",
-          "વૈશ્વિક સુલભતા",
-          "ડિજિટલ ચાર્ટ શેરિંગ",
-          "સંક્ષિપ્ત ચાર્ટ વિશ્લેષણ",
-          "વિશિષ્ટ પ્રશ્ન ઉકેલ",
-          "ડિજિટલ ઉપચાર રિપોર્ટ"
-        ]
-      }
+  {
+    icon: Video,
+    title: "Online Consultation",
+    titleHi: "ऑनलाइन परामर्श",
+    titleGu: "ઓનલાઇન પરામર્શ",
+    description: "Connect with us from anywhere in the world via video call. Get your our readings from the comfort of your home.",
+    descriptionHi: "वीडियो कॉल के माध्यम से दुनिया में कहीं से भी हमसे जुड़ें। अपने घर के आराम से अपनी हमारे रीडिंग प्राप्त करें।",
+    descriptionGu: "વીડિયો કોલ દ્વારા વિશ્વના કોઈપણ સ્થળેથી અમારી સાથે જોડાઓ. તમારા ઘરની આરામથી તમારી અમારા રીડિંગ્સ મેળવો.",
+    price: "851",
+    duration: "45 minutes",
+    durationHi: "45 मिनट",
+    durationGu: "45 મિનિટ",
+    features: {
+      en: [
+        "Video/Audio call consultation",
+        "Global accessibility",
+        "Digital chart sharing",
+        "Concise chart analysis",
+        "Specific query resolution",
+        "Digital remedy report"
+      ],
+      hi: [
+        "वीडियो/ऑडियो कॉल परामर्श",
+        "वैश्विक पहुंच",
+        "डिजिटल चार्ट साझाकरण",
+        "संक्षिप्त चार्ट विश्लेषण",
+        "विशिष्ट प्रश्न समाधान",
+        "डिजिटल उपाय रिपोर्ट"
+      ],
+      gu: [
+        "વીડિયો/ઓડિયો કોલ પરામર્શ",
+        "વૈશ્વિક સુલભતા",
+        "ડિજિટલ ચાર્ટ શેરિંગ",
+        "સંક્ષિપ્ત ચાર્ટ વિશ્લેષણ",
+        "વિશિષ્ટ પ્રશ્ન ઉકેલ",
+        "ડિજિટલ ઉપચાર રિપોર્ટ"
+      ]
     }
-  ];
+  }
+];
 
 const areasWithin6_5km = [
-  "Vastral", "Ramrajya Nagar", "Mahadev Nagar", "Nirant Cross Road", "Odhav", 
-  "Nikol", "Singarwa", "Amraiwadi", "CTM", "Hatkeshwar", "Rabari Vasahat", 
-  "Khokhra", "Gomtipur", "Rakhiyal", "Bapunagar", "Thakkarbapa Nagar", 
+  "Vastral", "Ramrajya Nagar", "Mahadev Nagar", "Nirant Cross Road", "Odhav",
+  "Nikol", "Singarwa", "Amraiwadi", "CTM", "Hatkeshwar", "Rabari Vasahat",
+  "Khokhra", "Gomtipur", "Rakhiyal", "Bapunagar", "Thakkarbapa Nagar",
   "Karai", "Vinzol", "Arbudanagar", "Jivanwadi", "Pranami Nagar", "Ratanpura"
 ];
 
@@ -221,21 +221,20 @@ function DistanceChecker() {
   };
 
   return (
-    <div className={`p-8 rounded-[2rem] border-2 mb-12 ${
-      theme === 'dark' ? 'bg-[#12121a]/50 border-[#ff6b35]/20' : 'bg-white/80 border-[#ff6b35]/10'
-    } backdrop-blur-xl shadow-xl`}>
+    <div className={`p-8 rounded-[2rem] border-2 mb-12 ${theme === 'dark' ? 'bg-[#12121a]/50 border-[#ff6b35]/20' : 'bg-white/80 border-[#ff6b35]/10'
+      } backdrop-blur-xl shadow-xl`}>
       <h3 className="font-[family-name:var(--font-cinzel)] text-2xl font-bold mb-6 text-[#ff6b35] flex items-center gap-2">
         <MapPin className="w-6 h-6" /> {getTranslation('title')}
       </h3>
       <div className="flex flex-col md:flex-row gap-4">
-        <Input 
+        <Input
           className={`flex-1 h-12 rounded-xl ${theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-gray-50'}`}
           placeholder={getTranslation('placeholder')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleCheck(search)}
         />
-        <Button 
+        <Button
           onClick={() => handleCheck(search)}
           className="bg-[#ff6b35] hover:bg-[#ff8c5e] text-white rounded-xl h-12 px-8 font-bold"
         >
@@ -253,11 +252,10 @@ function DistanceChecker() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`mt-6 p-4 rounded-xl border flex items-center gap-3 ${
-              result.status === 'within' 
-                ? 'bg-green-500/10 border-green-500/20 text-green-500' 
+            className={`mt-6 p-4 rounded-xl border flex items-center gap-3 ${result.status === 'within'
+                ? 'bg-green-500/10 border-green-500/20 text-green-500'
                 : 'bg-[#ff6b35]/10 border-[#ff6b35]/20 text-[#ff6b35]'
-            }`}
+              }`}
           >
             {result.status === 'within' ? <CheckCircle className="w-6 h-6" /> : <MapPin className="w-6 h-6" />}
             <span className="font-bold text-lg">
@@ -266,11 +264,11 @@ function DistanceChecker() {
           </motion.div>
         )}
       </AnimatePresence>
-      
+
       <div className="mt-4 flex flex-wrap gap-2">
         <span className="text-xs opacity-60 uppercase font-black tracking-widest mr-2">{language === 'gu' ? 'લોકપ્રિય વિસ્તારો (6.5km):' : 'Popular areas (6.5km):'}</span>
         {areasWithin6_5km.slice(0, 8).map(area => (
-          <button 
+          <button
             key={area}
             onClick={() => {
               setSearch(area);
@@ -304,7 +302,7 @@ export default function ServicesPage() {
           setDbPrices(map);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   const getServicePrice = (service: typeof services[0]) => {
@@ -362,19 +360,18 @@ export default function ServicesPage() {
 
       <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden pt-20">
         <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1436891620584-47fd0e565afb?q=80&w=2000" 
-            alt="Stars Cover" 
+          <img
+            src="https://images.unsplash.com/photo-1436891620584-47fd0e565afb?q=80&w=2000"
+            alt="Stars Cover"
             className="w-full h-full object-cover opacity-40"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0a0f]" />
         </div>
         <StarField />
-        <div className={`absolute inset-0 ${
-          theme === 'dark' 
+        <div className={`absolute inset-0 ${theme === 'dark'
             ? 'bg-gradient-to-b from-[#2d1b4e]/30 via-transparent to-[#0a0a0f]'
             : 'bg-gradient-to-b from-[#ffe4d6]/30 via-transparent to-[#fef7ed]'
-        }`} />
+          }`} />
 
         <div className="relative z-10 text-center px-6 max-w-4xl mt-10">
           <motion.div
@@ -402,7 +399,7 @@ export default function ServicesPage() {
       <section className={`py-24 px-6 ${theme === 'dark' ? 'bg-gradient-to-b from-[#0a0a0f] to-[#12121a]' : 'bg-gradient-to-b from-[#fef7ed] to-[#fde4d0]'}`}>
         <div className="max-w-7xl mx-auto">
           <DistanceChecker />
-          
+
           <div className="grid md:grid-cols-1 gap-12">
             {services.map((service, index) => (
               <motion.div
@@ -425,29 +422,29 @@ export default function ServicesPage() {
                         <p className={`mb-6 text-xl ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#6b5847]'}`}>
                           {getServiceDescription(service)}
                         </p>
-                        
-                          <div className="flex items-center gap-6 mb-6">
-                            <div className="flex items-center gap-2">
-                              <IndianRupee className="w-5 h-5 text-[#ff6b35]" />
-                                <span className="text-[#ff6b35] font-semibold text-2xl">{getServicePrice(service)}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Clock className="w-5 h-5 text-[#ff6b35]" />
-                              <span className={`font-semibold ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#6b5847]'}`}>{getServiceDurationDynamic(service)}</span>
-                            </div>
-                          </div>
 
-                          <Link href="/booking">
-                            <Button 
-                              onClick={handleBookNow}
-                              className="w-full md:w-auto bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-semibold text-xl px-8 py-6"
-                            >
-                              <Sparkles className="w-5 h-5 mr-2" />
-                              {language === 'hi' && 'अभी बुक करें'}
-                              {language === 'gu' && 'હવે બુક કરો'}
-                              {language === 'en' && 'Book Now'}
-                            </Button>
-                          </Link>
+                        <div className="flex items-center gap-6 mb-6">
+                          <div className="flex items-center gap-2">
+                            <IndianRupee className="w-5 h-5 text-[#ff6b35]" />
+                            <span className="text-[#ff6b35] font-semibold text-2xl">{getServicePrice(service)}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-5 h-5 text-[#ff6b35]" />
+                            <span className={`font-semibold ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#6b5847]'}`}>{getServiceDurationDynamic(service)}</span>
+                          </div>
+                        </div>
+
+                        <Link href="/booking">
+                          <Button
+                            onClick={handleBookNow}
+                            className="w-full md:w-auto bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-semibold text-xl px-8 py-6"
+                          >
+                            <Sparkles className="w-5 h-5 mr-2" />
+                            {language === 'hi' && 'अभी बुक करें'}
+                            {language === 'gu' && 'હવે બુક કરો'}
+                            {language === 'en' && 'Book Now'}
+                          </Button>
+                        </Link>
                       </div>
 
                       <div>
@@ -471,7 +468,7 @@ export default function ServicesPage() {
               </motion.div>
             ))}
           </div>
-          
+
 
         </div>
       </section>
@@ -489,11 +486,10 @@ export default function ServicesPage() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className={`p-12 rounded-[2rem] border-2 shadow-2xl ${
-              theme === 'dark' 
-                ? 'bg-[#12121a]/50 border-[#ff6b35]/20 shadow-[#ff6b35]/5' 
+            className={`p-12 rounded-[2rem] border-2 shadow-2xl ${theme === 'dark'
+                ? 'bg-[#12121a]/50 border-[#ff6b35]/20 shadow-[#ff6b35]/5'
                 : 'bg-white/80 border-[#ff6b35]/10 shadow-[#ff6b35]/10'
-            } backdrop-blur-xl`}
+              } backdrop-blur-xl`}
           >
             <div className="flex justify-center gap-4 mb-8">
               <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#ff6b35] self-center" />
@@ -506,7 +502,7 @@ export default function ServicesPage() {
               {language === 'gu' && 'તમારી આધ્યાત્મિક યાત્રા શરૂ કરો'}
               {language === 'en' && 'Begin Your Sacred Journey'}
             </h2>
-            
+
             <p className={`text-xl md:text-2xl mb-12 max-w-2xl mx-auto leading-relaxed ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#6b5847]'}`}>
               {language === 'hi' && 'ज्योतिष का प्राचीन ज्ञान आपके जीवन को आलोकित करने की प्रतीक्षा कर रहा है।'}
               {language === 'gu' && 'જ્યોતિષનું પ્રાચીન જ્ઞાન તમારા જીવનને પ્રકાશિત કરવાની રાહ જોઈ રહ્યું છે।'}
@@ -514,22 +510,21 @@ export default function ServicesPage() {
             </p>
 
             <div className="flex flex-col items-center gap-8">
-                <Link href="/booking">
-                  <Button 
-                    size="lg" 
-                    className="bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-bold text-2xl px-12 py-8 rounded-full shadow-lg shadow-[#ff6b35]/25 hover:scale-105 transition-all duration-300 group"
-                  >
+              <Link href="/booking">
+                <Button
+                  size="lg"
+                  className="bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-bold text-2xl px-12 py-8 rounded-full shadow-lg shadow-[#ff6b35]/25 hover:scale-105 transition-all duration-300 group"
+                >
                   <Sparkles className="w-6 h-6 mr-3 group-hover:rotate-12 transition-transform" />
                   {t('Book Your Reading')}
                 </Button>
               </Link>
 
               <div className="relative">
-                <div className={`flex items-center gap-3 px-8 py-4 rounded-xl border border-dashed transition-colors ${
-                  theme === 'dark' 
-                    ? 'bg-[#ff6b35]/5 border-[#ff6b35]/30' 
+                <div className={`flex items-center gap-3 px-8 py-4 rounded-xl border border-dashed transition-colors ${theme === 'dark'
+                    ? 'bg-[#ff6b35]/5 border-[#ff6b35]/30'
                     : 'bg-[#ff6b35]/5 border-[#ff6b35]/40'
-                }`}>
+                  }`}>
                   <div className="w-2 h-2 rounded-full bg-[#ff6b35] animate-ping" />
                   <p className={`text-lg font-medium italic ${theme === 'dark' ? 'text-[#ff8c5e]' : 'text-[#e65a2b]'}`}>
                     {language === 'hi' && 'परामर्श के बाद, हम सभी प्रकार की हमारे पूजा सेवाएं भी प्रदान करते हैं।'}

@@ -63,8 +63,8 @@ const DEFAULT_CONSULTATION_TYPES = [
     title: { en: "Online Consultation", hi: "ऑनलाइन परामर्श", gu: "ઓનલાઈન પરામર્શ" },
     description: { en: "Connect with us from anywhere in the world via video call", hi: "वीडियो कॉल के माध्यम से दुनिया में कहीं से भी हमसे जुड़ें", gu: "વીડિયો કોલ દ્વારા વિશ્વના કોઈપણ સ્થળેથી અમારી સાથે જોડાઓ" },
     availability: { en: "Available everywhere", hi: "सभी जगह उपलब्ध", gu: "બધે ઉપલબ્ધ" },
-    price: 50100,
-    priceDisplay: "₹ 501",
+    price: 85100,
+    priceDisplay: "₹ 851",
     duration: { en: "45 minutes", hi: "45 मिनट", gu: "45 મિનિટ" },
     locationRestricted: false,
   }
@@ -87,7 +87,7 @@ export default function BookingPage() {
   const { user, loading, showAuthModal } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { language, t } = useTranslation();
-  
+
   const [consultationTypes, setConsultationTypes] = useState(DEFAULT_CONSULTATION_TYPES);
   const [step, setStep] = useState(1);
   const [userGender, setUserGender] = useState<string>("male");
@@ -102,19 +102,19 @@ export default function BookingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDayBlocked, setIsDayBlocked] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-    const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
-    const [slotError, setSlotError] = useState<string | null>(null);
-    const [blockedDates, setBlockedDates] = useState<string[]>([]);
-    const [bookedSlots, setBookedSlots] = useState<string[]>([]);
-    const [hasSentPendingNotification, setHasSentPendingNotification] = useState(false);
-    const [invoiceNumber, setInvoiceNumber] = useState<string | null>(null);
-    const [showPaymentSuccessPopup, setShowPaymentSuccessPopup] = useState(false);
-    const [copiedInvoice, setCopiedInvoice] = useState(false);
-    const [paymentTransactionId, setPaymentTransactionId] = useState<string | null>(null);
-  
-    const { offer: offerSettings, isOfferValid: isOfferValid } = useOffer();
+  const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
+  const [slotError, setSlotError] = useState<string | null>(null);
+  const [blockedDates, setBlockedDates] = useState<string[]>([]);
+  const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+  const [hasSentPendingNotification, setHasSentPendingNotification] = useState(false);
+  const [invoiceNumber, setInvoiceNumber] = useState<string | null>(null);
+  const [showPaymentSuccessPopup, setShowPaymentSuccessPopup] = useState(false);
+  const [copiedInvoice, setCopiedInvoice] = useState(false);
+  const [paymentTransactionId, setPaymentTransactionId] = useState<string | null>(null);
 
-    const [formData, setFormData] = useState({
+  const { offer: offerSettings, isOfferValid: isOfferValid } = useOffer();
+
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
@@ -150,7 +150,7 @@ export default function BookingPage() {
           );
         }
       })
-      .catch(() => {/* use defaults */});
+      .catch(() => {/* use defaults */ });
   }, []);
 
   const selectedConsultation = consultationTypes.find(type => type.id === selectedType);
@@ -158,14 +158,14 @@ export default function BookingPage() {
   // Determine current price based on offer settings OR default price
   const getCurrentPrice = () => {
     if (!selectedConsultation) return 0;
-    
+
     // Check if there is a site-wide special offer for online consulting and if the selected type matches its original price
     if (isOfferValid && offerSettings && offerSettings.is_active) {
-       // Assuming the offer is specifically on the base online consulting (original 851, offer 501)
-       // You can expand this logic if the offer applies to other types like 'home-within' (1101 -> ?)
-       if (selectedType === 'online' && selectedConsultation.price === (offerSettings.original_price * 100)) {
-           return offerSettings.offer_price * 100;
-       }
+      // Assuming the offer is specifically on the base online consulting (original 851, offer 501)
+      // You can expand this logic if the offer applies to other types like 'home-within' (1101 -> ?)
+      if (selectedType === 'online' && selectedConsultation.price === (offerSettings.original_price * 100)) {
+        return offerSettings.offer_price * 100;
+      }
     }
     return selectedConsultation.price;
   };
@@ -220,7 +220,7 @@ export default function BookingPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: "confirmed", payment_status: "completed" }),
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         // Send notification with the fetched data to ensure it's not empty
@@ -271,68 +271,68 @@ export default function BookingPage() {
     }
   }, [selectedDate]);
 
-    useEffect(() => {
-      async function fetchUserProfile() {
-        if (user) {
-          const { data, error } = await supabase
-            .from("profiles")
-            .select("name, phone, address, gender, dob, tob, pob, city")
-            .eq("id", user.id)
-            .maybeSingle();
-  
-          if (data && !error) {
-            if (data.gender) setUserGender(data.gender);
-            
-            setFormData(prev => ({
-              ...prev,
-              name: data.name || prev.name || user.user_metadata?.full_name || user.user_metadata?.name || "",
-              email: user.email || prev.email,
-              phone: data.phone || prev.phone || user.user_metadata?.phone_number || "",
-              address: data.address || prev.address || "",
-              birthDate: data.dob || user.user_metadata?.dob || prev.birthDate || "",
-              birthTime: data.tob || user.user_metadata?.tob || prev.birthTime || "",
-              birthPlace: data.pob || user.user_metadata?.pob || prev.birthPlace || "",
-              city: data.city || prev.city || "",
-            }));
-          } else {
-            // Fallback to user metadata if profile fetch fails or is empty
-            if (user.user_metadata?.gender) setUserGender(user.user_metadata.gender);
-            setFormData(prev => ({
-              ...prev,
-              name: user.user_metadata?.full_name || user.user_metadata?.name || prev.name,
-              email: user.email || prev.email,
-              phone: user.user_metadata?.phone_number || prev.phone || "",
-              birthDate: user.user_metadata?.dob || prev.birthDate || "",
-              birthTime: user.user_metadata?.tob || prev.birthTime || "",
-              birthPlace: user.user_metadata?.pob || prev.birthPlace || "",
-            }));
-          }
+  useEffect(() => {
+    async function fetchUserProfile() {
+      if (user) {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("name, phone, address, gender, dob, tob, pob, city")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        if (data && !error) {
+          if (data.gender) setUserGender(data.gender);
+
+          setFormData(prev => ({
+            ...prev,
+            name: data.name || prev.name || user.user_metadata?.full_name || user.user_metadata?.name || "",
+            email: user.email || prev.email,
+            phone: data.phone || prev.phone || user.user_metadata?.phone_number || "",
+            address: data.address || prev.address || "",
+            birthDate: data.dob || user.user_metadata?.dob || prev.birthDate || "",
+            birthTime: data.tob || user.user_metadata?.tob || prev.birthTime || "",
+            birthPlace: data.pob || user.user_metadata?.pob || prev.birthPlace || "",
+            city: data.city || prev.city || "",
+          }));
+        } else {
+          // Fallback to user metadata if profile fetch fails or is empty
+          if (user.user_metadata?.gender) setUserGender(user.user_metadata.gender);
+          setFormData(prev => ({
+            ...prev,
+            name: user.user_metadata?.full_name || user.user_metadata?.name || prev.name,
+            email: user.email || prev.email,
+            phone: user.user_metadata?.phone_number || prev.phone || "",
+            birthDate: user.user_metadata?.dob || prev.birthDate || "",
+            birthTime: user.user_metadata?.tob || prev.birthTime || "",
+            birthPlace: user.user_metadata?.pob || prev.birthPlace || "",
+          }));
         }
       }
-      fetchUserProfile();
-    }, [user]);
+    }
+    fetchUserProfile();
+  }, [user]);
 
-useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const bid = urlParams.get('booking_id');
-        const pStatus = urlParams.get('payment_status');
-        if (bid) {
-          setBookingId(bid);
-          setStep(4);
-          fetchBookingDetails(bid);
-          if (pStatus === 'success') {
-            // Legacy/direct success - verify with DB via polling
-            setPaymentSuccess(true);
-            setPaymentFailed(false);
-            setShowPaymentSuccessPopup(true);
-            confirmPayment(bid);
-          } else if (pStatus === 'failed') {
-            setPaymentSuccess(false);
-            setPaymentFailed(true);
-          }
-          // For 'pending' or any other status, polling will detect the actual state
-        }
-      }, []);
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const bid = urlParams.get('booking_id');
+    const pStatus = urlParams.get('payment_status');
+    if (bid) {
+      setBookingId(bid);
+      setStep(4);
+      fetchBookingDetails(bid);
+      if (pStatus === 'success') {
+        // Legacy/direct success - verify with DB via polling
+        setPaymentSuccess(true);
+        setPaymentFailed(false);
+        setShowPaymentSuccessPopup(true);
+        confirmPayment(bid);
+      } else if (pStatus === 'failed') {
+        setPaymentSuccess(false);
+        setPaymentFailed(true);
+      }
+      // For 'pending' or any other status, polling will detect the actual state
+    }
+  }, []);
 
   useEffect(() => {
     if (step === 4 && bookingId && formData.name && !paymentSuccess && !hasSentPendingNotification) {
@@ -402,18 +402,18 @@ useEffect(() => {
   }, [step, bookingId, paymentSuccess, paymentFailed]);
 
   useEffect(() => {
-      if (!selectedDate) {
-        const today = new Date();
-        if (today.getDay() === 0) {
-          setSelectedDate(today);
-        }
+    if (!selectedDate) {
+      const today = new Date();
+      if (today.getDay() === 0) {
+        setSelectedDate(today);
       }
-    }, [selectedDate]);
+    }
+  }, [selectedDate]);
 
-  const profilePic = userGender.toLowerCase() === "female" 
-    ? "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Screenshot-2025-12-25-000158-1766601181550.png?width=8000&height=8000&resize=contain" 
+  const profilePic = userGender.toLowerCase() === "female"
+    ? "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Screenshot-2025-12-25-000158-1766601181550.png?width=8000&height=8000&resize=contain"
     : "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Screenshot-2025-12-20-145054-1766223343347.png?width=8000&height=8000&resize=contain";
-  
+
   const isAhmedabad = formData.city.toLowerCase().includes('ahmedabad') || formData.city.toLowerCase().includes('અમદાવાદ') || formData.city.toLowerCase().includes('अहमदाबाद');
   const availableConsultationTypes = consultationTypes.filter(type => type.locationRestricted ? isAhmedabad : true);
 
@@ -449,7 +449,7 @@ useEffect(() => {
     setSelectedTime(time);
   };
 
-    const handleDownloadInvoice = () => {
+  const handleDownloadInvoice = () => {
     const price = getCurrentPrice() / 100;
     const serviceName = selectedConsultation ? getText(selectedConsultation.title) : "Consultation Session";
     const dateStr = selectedDate?.toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) || '';
@@ -466,25 +466,25 @@ useEffect(() => {
     toast.success(t('Invoice downloaded successfully!'));
   };
 
-const fetchBookingDetails = async (bid: string) => {
-      try {
-        const response = await fetch(`/api/bookings/${bid}`);
-        if (response.ok) {
-          const data = await response.json();
-            setFormData({ name: data.full_name, email: data.email, phone: data.phone, city: data.city || "", address: data.address || "", birthDate: data.date_of_birth, birthTime: data.time_of_birth, birthPlace: data.place_of_birth, questions: data.special_requests || "" });
-            setSelectedType(data.service_type);
-            setSelectedDate(new Date(data.booking_date));
-            setSelectedTime(data.booking_time);
-            setInvoiceNumber(data.invoice_number);
-            if (data.payment_intent_id) setPaymentTransactionId(data.payment_intent_id);
-            if (data.payment_status === 'success' || data.payment_status === 'completed') {
-                setPaymentSuccess(true);
-              }
+  const fetchBookingDetails = async (bid: string) => {
+    try {
+      const response = await fetch(`/api/bookings/${bid}`);
+      if (response.ok) {
+        const data = await response.json();
+        setFormData({ name: data.full_name, email: data.email, phone: data.phone, city: data.city || "", address: data.address || "", birthDate: data.date_of_birth, birthTime: data.time_of_birth, birthPlace: data.place_of_birth, questions: data.special_requests || "" });
+        setSelectedType(data.service_type);
+        setSelectedDate(new Date(data.booking_date));
+        setSelectedTime(data.booking_time);
+        setInvoiceNumber(data.invoice_number);
+        if (data.payment_intent_id) setPaymentTransactionId(data.payment_intent_id);
+        if (data.payment_status === 'success' || data.payment_status === 'completed') {
+          setPaymentSuccess(true);
         }
-      } catch (error) {
-        console.error("Error fetching booking:", error);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching booking:", error);
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   const canProceedToStep2 = selectedType !== null && formData.city;
@@ -495,12 +495,12 @@ const fetchBookingDetails = async (bid: string) => {
     if (!selectedConsultation || !selectedDate || !selectedTime) return;
     setIsCreatingOrder(true);
     setSlotError(null);
-    
+
     try {
       const dateStr = selectedDate.toISOString().split('T')[0];
       const checkRes = await fetch(`/api/availability?date=${dateStr}`);
       const checkData = await checkRes.json();
-      
+
       if (checkData.success) {
         if (checkData.data?.is_available === false) {
           setSlotError(language === 'gu' ? 'આ દિવસ હવે ઉપલબ્ધ નથી' : 'This day is no longer available');
@@ -517,22 +517,22 @@ const fetchBookingDetails = async (bid: string) => {
       const response = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          full_name: formData.name, 
-          email: formData.email, 
-          phone: formData.phone, 
-          city: formData.city, 
-          address: selectedType?.startsWith("home") ? formData.address : null, 
-          date_of_birth: formData.birthDate, 
-          time_of_birth: formData.birthTime || "00:00", 
-          place_of_birth: formData.birthPlace || "Not specified", 
-          service_type: selectedConsultation.id.startsWith('home') ? 'home' : selectedConsultation.id, 
-          booking_date: selectedDate.toISOString().split('T')[0], 
-          booking_time: selectedTime, 
-          special_requests: formData.questions || null, 
-          payment_status: "pending", 
-          amount: getCurrentPrice() / 100, 
-          status: "pending" 
+        body: JSON.stringify({
+          full_name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          city: formData.city,
+          address: selectedType?.startsWith("home") ? formData.address : null,
+          date_of_birth: formData.birthDate,
+          time_of_birth: formData.birthTime || "00:00",
+          place_of_birth: formData.birthPlace || "Not specified",
+          service_type: selectedConsultation.id.startsWith('home') ? 'home' : selectedConsultation.id,
+          booking_date: selectedDate.toISOString().split('T')[0],
+          booking_time: selectedTime,
+          special_requests: formData.questions || null,
+          payment_status: "pending",
+          amount: getCurrentPrice() / 100,
+          status: "pending"
         }),
       });
       if (!response.ok) {
@@ -541,13 +541,13 @@ const fetchBookingDetails = async (bid: string) => {
         return;
       }
       const result = await response.json();
-        if (result.success && result.data?.[0]) {
-          setBookingId(result.data[0].id);
-          setInvoiceNumber(result.data[0].invoice_number);
-          setIsBookingSaved(true);
-          setStep(4);
-          sendTelegramNotification("pending");
-        }
+      if (result.success && result.data?.[0]) {
+        setBookingId(result.data[0].id);
+        setInvoiceNumber(result.data[0].invoice_number);
+        setIsBookingSaved(true);
+        setStep(4);
+        sendTelegramNotification("pending");
+      }
     } catch (error) {
       console.error("Error saving booking:", error);
     } finally {
@@ -603,26 +603,26 @@ const fetchBookingDetails = async (bid: string) => {
       <nav className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b ${theme === 'dark' ? 'bg-[#0a0a0f]/95 border-[#ff6b35]/20' : 'bg-[#ebe3d5]/95 border-[#ff6b35]/20'}`}>
         <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-              <Image 
-                src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/c601c1cc-61c8-474d-bbc9-2026bfe37c34/logo_withoutname-removebg-1767251276652.png?width=112&height=112&resize=contain"
-                alt="Katyaayani Astrologer"
-                width={56}
-                height={56}
-                priority
-                className="object-contain"
-              />
-              <span className="font-[family-name:var(--font-cinzel)] text-xs md:text-sm lg:text-base font-bold text-gradient-ancient leading-tight whitespace-nowrap">
-                KATYAAYANI<br />ASTROLOGER
-              </span>
-            </Link>
-<div className="hidden md:flex items-center gap-6">
-              <Link href="/" className="hover:text-[#ff6b35] transition-colors text-xl">{t('Home')}</Link>
-              <Link href="/services" className="hover:text-[#ff6b35] transition-colors text-xl">{t('Services')}</Link>
+            <Image
+              src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/c601c1cc-61c8-474d-bbc9-2026bfe37c34/logo_withoutname-removebg-1767251276652.png?width=112&height=112&resize=contain"
+              alt="Katyaayani Astrologer"
+              width={56}
+              height={56}
+              priority
+              className="object-contain"
+            />
+            <span className="font-[family-name:var(--font-cinzel)] text-xs md:text-sm lg:text-base font-bold text-gradient-ancient leading-tight whitespace-nowrap">
+              KATYAAYANI<br />ASTROLOGER
+            </span>
+          </Link>
+          <div className="hidden md:flex items-center gap-6">
+            <Link href="/" className="hover:text-[#ff6b35] transition-colors text-xl">{t('Home')}</Link>
+            <Link href="/services" className="hover:text-[#ff6b35] transition-colors text-xl">{t('Services')}</Link>
 
-              <Link href="/booking" className="text-[#ff6b35] text-xl">{t('Book')}</Link>
-              <Link href="/feedback" className="hover:text-[#ff6b35] transition-colors text-xl">{t('Feedback')}</Link>
-              <Link href="/about" className="hover:text-[#ff6b35] transition-colors text-xl">{t('About')}</Link>
-            </div>
+            <Link href="/booking" className="text-[#ff6b35] text-xl">{t('Book')}</Link>
+            <Link href="/feedback" className="hover:text-[#ff6b35] transition-colors text-xl">{t('Feedback')}</Link>
+            <Link href="/about" className="hover:text-[#ff6b35] transition-colors text-xl">{t('About')}</Link>
+          </div>
           <div className="flex items-center gap-2">
             <GoogleTranslateWidget />
             <Button variant="outline" size="icon" onClick={toggleTheme} className="border-[#ff6b35] text-[#ff6b35] hover:bg-[#ff6b35]/10 h-9 w-9">
@@ -647,13 +647,13 @@ const fetchBookingDetails = async (bid: string) => {
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className={`md:hidden border-t ${theme === 'dark' ? 'border-[#ff6b35]/20' : 'border-[#ff6b35]/20'} ${theme === 'dark' ? 'bg-[#0a0a0f]' : 'bg-[#ebe3d5]'}`}>
-<div className="px-6 py-4 space-y-3">
-                  <Link href="/" className="block py-2 hover:text-[#ff6b35]" onClick={() => setIsMenuOpen(false)}>{t('Home')}</Link>
-                  <Link href="/services" className="block py-2 hover:text-[#ff6b35]" onClick={() => setIsMenuOpen(false)}>{t('Services')}</Link>
-                  <Link href="/booking" className="block py-2 text-[#ff6b35]" onClick={() => setIsMenuOpen(false)}>{t('Book')}</Link>
-                  <Link href="/feedback" className="block py-2 hover:text-[#ff6b35]" onClick={() => setIsMenuOpen(false)}>{t('Feedback')}</Link>
-                  <Link href="/about" className="block py-2 hover:text-[#ff6b35]" onClick={() => setIsMenuOpen(false)}>{t('About')}</Link>
-                </div>
+              <div className="px-6 py-4 space-y-3">
+                <Link href="/" className="block py-2 hover:text-[#ff6b35]" onClick={() => setIsMenuOpen(false)}>{t('Home')}</Link>
+                <Link href="/services" className="block py-2 hover:text-[#ff6b35]" onClick={() => setIsMenuOpen(false)}>{t('Services')}</Link>
+                <Link href="/booking" className="block py-2 text-[#ff6b35]" onClick={() => setIsMenuOpen(false)}>{t('Book')}</Link>
+                <Link href="/feedback" className="block py-2 hover:text-[#ff6b35]" onClick={() => setIsMenuOpen(false)}>{t('Feedback')}</Link>
+                <Link href="/about" className="block py-2 hover:text-[#ff6b35]" onClick={() => setIsMenuOpen(false)}>{t('About')}</Link>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -664,7 +664,7 @@ const fetchBookingDetails = async (bid: string) => {
             <h1 className="font-[family-name:var(--font-cinzel)] text-4xl md:text-5xl font-bold mb-4 text-gradient-ancient">{t('Book Your Consultation')}</h1>
             <p className={`text-xl ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#6b5847]'}`}>{t('Four simple steps')}</p>
           </motion.div>
-          
+
           <div className="flex justify-center mb-12">
             <div className="flex items-center gap-4">
               {[1, 2, 3, 4].map((s) => (
@@ -683,15 +683,15 @@ const fetchBookingDetails = async (bid: string) => {
                 <CardContent className="p-6">
                   <div className="space-y-2">
                     <Label htmlFor="city" className="flex items-center gap-2"><MapPin className="w-4 h-4 text-[#ff6b35]" />{t('Your City')} *</Label>
-                      <input 
-                        id="city" 
-                        name="city" 
-                        value={formData.city} 
-                        onChange={handleInputChange} 
-                        readOnly={!!user && !!formData.city}
-                        className={`w-full h-10 px-3 rounded-md border ${theme === 'dark' ? 'bg-[#1a1a2e] border-[#ff6b35]/20 text-[#f5f0e8]' : 'bg-white border-[#ff6b35]/20 text-[#2d1810]'} ${!!user && !!formData.city ? 'opacity-70 cursor-not-allowed select-none' : ''}`} 
-                        placeholder="e.g., Ahmedabad" 
-                      />
+                    <input
+                      id="city"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleInputChange}
+                      readOnly={!!user && !!formData.city}
+                      className={`w-full h-10 px-3 rounded-md border ${theme === 'dark' ? 'bg-[#1a1a2e] border-[#ff6b35]/20 text-[#f5f0e8]' : 'bg-white border-[#ff6b35]/20 text-[#2d1810]'} ${!!user && !!formData.city ? 'opacity-70 cursor-not-allowed select-none' : ''}`}
+                      placeholder="e.g., Ahmedabad"
+                    />
 
                   </div>
                 </CardContent>
@@ -724,96 +724,96 @@ const fetchBookingDetails = async (bid: string) => {
               <Card className={`${theme === 'dark' ? 'bg-[#12121a]' : 'bg-white'} border-[#ff6b35]/20`}>
                 <CardContent className="p-8">
                   <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label htmlFor="name" className="flex items-center gap-2"><User className="w-4 h-4 text-[#ff6b35]" />{t('Full Name')} *</Label>
-                        <Input 
-                          id="name" 
-                          name="name" 
-                          value={formData.name} 
-                          onChange={handleInputChange} 
-                          readOnly={!!user && !!formData.name}
-                          className={`${theme === 'dark' ? 'bg-[#1a1a2e] text-[#f5f0e8]' : 'bg-white text-[#2d1810]'} border-[#ff6b35]/20 ${!!user && !!formData.name ? 'opacity-70 cursor-not-allowed select-none' : ''}`} 
-                          placeholder="Your full name" 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="email" className="flex items-center gap-2"><Mail className="w-4 h-4 text-[#ff6b35]" />{t('Email')} *</Label>
-                        <Input 
-                          id="email" 
-                          name="email" 
-                          type="email" 
-                          value={formData.email} 
-                          onChange={handleInputChange} 
-                          readOnly={!!user && !!formData.email}
-                          className={`${theme === 'dark' ? 'bg-[#1a1a2e] text-[#f5f0e8]' : 'bg-white text-[#2d1810]'} border-[#ff6b35]/20 ${!!user && !!formData.email ? 'opacity-70 cursor-not-allowed select-none' : ''}`} 
-                          placeholder="Your email" 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="phone" className="flex items-center gap-2"><Phone className="w-4 h-4 text-[#ff6b35]" />{t('Phone')} *</Label>
-                        <Input 
-                          id="phone" 
-                          name="phone" 
-                          value={formData.phone} 
-                          onChange={handleInputChange} 
-                          readOnly={!!user && !!formData.phone}
-                          className={`${theme === 'dark' ? 'bg-[#1a1a2e] text-[#f5f0e8]' : 'bg-white text-[#2d1810]'} border-[#ff6b35]/20 ${!!user && !!formData.phone ? 'opacity-70 cursor-not-allowed select-none' : ''}`} 
-                          placeholder="+91 98249 29588" 
-                        />
-                      </div>
-                      {selectedType?.startsWith("home") && (
-                        <div className="space-y-4 md:col-span-2">
-                          <div className="space-y-2">
-                            <Label htmlFor="address" className="flex items-center gap-2"><MapPin className="w-4 h-4 text-[#ff6b35]" />{t('Address')}</Label>
-                            <Input 
-                              id="address" 
-                              name="address" 
-                              value={formData.address} 
-                              onChange={handleInputChange} 
-                              readOnly={!!user && !!formData.address}
-                              className={`${theme === 'dark' ? 'bg-[#1a1a2e] text-[#f5f0e8]' : 'bg-white text-[#2d1810]'} border-[#ff6b35]/20 ${!!user && !!formData.address ? 'opacity-70 cursor-not-allowed select-none' : ''}`} 
-                              placeholder="Your home address" 
-                            />
-                          </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="name" className="flex items-center gap-2"><User className="w-4 h-4 text-[#ff6b35]" />{t('Full Name')} *</Label>
+                      <Input
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        readOnly={!!user && !!formData.name}
+                        className={`${theme === 'dark' ? 'bg-[#1a1a2e] text-[#f5f0e8]' : 'bg-white text-[#2d1810]'} border-[#ff6b35]/20 ${!!user && !!formData.name ? 'opacity-70 cursor-not-allowed select-none' : ''}`}
+                        placeholder="Your full name"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="flex items-center gap-2"><Mail className="w-4 h-4 text-[#ff6b35]" />{t('Email')} *</Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        readOnly={!!user && !!formData.email}
+                        className={`${theme === 'dark' ? 'bg-[#1a1a2e] text-[#f5f0e8]' : 'bg-white text-[#2d1810]'} border-[#ff6b35]/20 ${!!user && !!formData.email ? 'opacity-70 cursor-not-allowed select-none' : ''}`}
+                        placeholder="Your email"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="phone" className="flex items-center gap-2"><Phone className="w-4 h-4 text-[#ff6b35]" />{t('Phone')} *</Label>
+                      <Input
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        readOnly={!!user && !!formData.phone}
+                        className={`${theme === 'dark' ? 'bg-[#1a1a2e] text-[#f5f0e8]' : 'bg-white text-[#2d1810]'} border-[#ff6b35]/20 ${!!user && !!formData.phone ? 'opacity-70 cursor-not-allowed select-none' : ''}`}
+                        placeholder="+91 98249 29588"
+                      />
+                    </div>
+                    {selectedType?.startsWith("home") && (
+                      <div className="space-y-4 md:col-span-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="address" className="flex items-center gap-2"><MapPin className="w-4 h-4 text-[#ff6b35]" />{t('Address')}</Label>
+                          <Input
+                            id="address"
+                            name="address"
+                            value={formData.address}
+                            onChange={handleInputChange}
+                            readOnly={!!user && !!formData.address}
+                            className={`${theme === 'dark' ? 'bg-[#1a1a2e] text-[#f5f0e8]' : 'bg-white text-[#2d1810]'} border-[#ff6b35]/20 ${!!user && !!formData.address ? 'opacity-70 cursor-not-allowed select-none' : ''}`}
+                            placeholder="Your home address"
+                          />
                         </div>
-                      )}
-                      <div className="space-y-2">
-                        <Label htmlFor="birthDate" className="flex items-center gap-2"><Calendar className="w-4 h-4 text-[#ff6b35]" />{t('Birth Date')} *</Label>
-                        <Input 
-                          id="birthDate" 
-                          name="birthDate" 
-                          type="date" 
-                          value={formData.birthDate} 
-                          onChange={handleInputChange} 
-                          readOnly={!!user && !!formData.birthDate}
-                          className={`${theme === 'dark' ? 'bg-[#1a1a2e] text-[#f5f0e8]' : 'bg-white text-[#2d1810]'} border-[#ff6b35]/20 ${!!user && !!formData.birthDate ? 'opacity-70 cursor-not-allowed select-none' : ''}`} 
-                        />
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="birthTime" className="flex items-center gap-2"><Clock className="w-4 h-4 text-[#ff6b35]" />{t('Birth Time')} *</Label>
-                        <Input 
-                          id="birthTime" 
-                          name="birthTime" 
-                          type="time" 
-                          required 
-                          value={formData.birthTime} 
-                          onChange={handleInputChange} 
-                          readOnly={!!user && !!formData.birthTime}
-                          className={`${theme === 'dark' ? 'bg-[#1a1a2e] text-[#f5f0e8]' : 'bg-white text-[#2d1810]'} border-[#ff6b35]/20 ${!!user && !!formData.birthTime ? 'opacity-70 cursor-not-allowed select-none' : ''}`} 
-                        />
-                      </div>
-                      <div className="space-y-2 md:col-span-2">
-                        <Label htmlFor="birthPlace" className="flex items-center gap-2"><MapPin className="w-4 h-4 text-[#ff6b35]" />{t('Birth Place')}</Label>
-                        <Input 
-                          id="birthPlace" 
-                          name="birthPlace" 
-                          value={formData.birthPlace} 
-                          onChange={handleInputChange} 
-                          readOnly={!!user && !!formData.birthPlace}
-                          className={`${theme === 'dark' ? 'bg-[#1a1a2e] text-[#f5f0e8]' : 'bg-white text-[#2d1810]'} border-[#ff6b35]/20 ${!!user && !!formData.birthPlace ? 'opacity-70 cursor-not-allowed select-none' : ''}`} 
-                          placeholder="City, Country" 
-                        />
-                      </div>
+                    )}
+                    <div className="space-y-2">
+                      <Label htmlFor="birthDate" className="flex items-center gap-2"><Calendar className="w-4 h-4 text-[#ff6b35]" />{t('Birth Date')} *</Label>
+                      <Input
+                        id="birthDate"
+                        name="birthDate"
+                        type="date"
+                        value={formData.birthDate}
+                        onChange={handleInputChange}
+                        readOnly={!!user && !!formData.birthDate}
+                        className={`${theme === 'dark' ? 'bg-[#1a1a2e] text-[#f5f0e8]' : 'bg-white text-[#2d1810]'} border-[#ff6b35]/20 ${!!user && !!formData.birthDate ? 'opacity-70 cursor-not-allowed select-none' : ''}`}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="birthTime" className="flex items-center gap-2"><Clock className="w-4 h-4 text-[#ff6b35]" />{t('Birth Time')} *</Label>
+                      <Input
+                        id="birthTime"
+                        name="birthTime"
+                        type="time"
+                        required
+                        value={formData.birthTime}
+                        onChange={handleInputChange}
+                        readOnly={!!user && !!formData.birthTime}
+                        className={`${theme === 'dark' ? 'bg-[#1a1a2e] text-[#f5f0e8]' : 'bg-white text-[#2d1810]'} border-[#ff6b35]/20 ${!!user && !!formData.birthTime ? 'opacity-70 cursor-not-allowed select-none' : ''}`}
+                      />
+                    </div>
+                    <div className="space-y-2 md:col-span-2">
+                      <Label htmlFor="birthPlace" className="flex items-center gap-2"><MapPin className="w-4 h-4 text-[#ff6b35]" />{t('Birth Place')}</Label>
+                      <Input
+                        id="birthPlace"
+                        name="birthPlace"
+                        value={formData.birthPlace}
+                        onChange={handleInputChange}
+                        readOnly={!!user && !!formData.birthPlace}
+                        className={`${theme === 'dark' ? 'bg-[#1a1a2e] text-[#f5f0e8]' : 'bg-white text-[#2d1810]'} border-[#ff6b35]/20 ${!!user && !!formData.birthPlace ? 'opacity-70 cursor-not-allowed select-none' : ''}`}
+                        placeholder="City, Country"
+                      />
+                    </div>
 
                     <div className="space-y-2 md:col-span-2">
                       <Label htmlFor="questions">{t('Special Questions')}</Label>
@@ -837,15 +837,15 @@ const fetchBookingDetails = async (bid: string) => {
                 <Card className={`${theme === 'dark' ? 'bg-[#12121a]' : 'bg-white'} border-[#ff6b35]/20`}>
                   <CardHeader><CardTitle className="flex items-center gap-2"><Calendar className="w-5 h-5 text-[#ff6b35]" />{t('Select Date')}</CardTitle></CardHeader>
                   <CardContent>
-                    <CalendarComponent 
-                      mode="single" 
-                      selected={selectedDate} 
-                      onSelect={setSelectedDate} 
+                    <CalendarComponent
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={setSelectedDate}
                       disabled={(date) => {
                         const dateStr = date.toISOString().split('T')[0];
-                        return date < new Date(new Date().setHours(0,0,0,0)) || blockedDates.includes(dateStr);
-                      }} 
-                      className="rounded-md border border-[#ff6b35]/20 mx-auto" 
+                        return date < new Date(new Date().setHours(0, 0, 0, 0)) || blockedDates.includes(dateStr);
+                      }}
+                      className="rounded-md border border-[#ff6b35]/20 mx-auto"
                     />
                   </CardContent>
                 </Card>
@@ -862,11 +862,11 @@ const fetchBookingDetails = async (bid: string) => {
                     ) : (
                       <div className="grid grid-cols-2 gap-3">
                         {getAvailableTimeSlots(selectedDate).map((time) => (
-                          <Button 
-                            key={time} 
-                            variant="outline" 
-                            disabled={bookedSlots.includes(time)} 
-                            className={`${selectedTime === time ? "bg-[#ff6b35] text-white" : "border-[#ff6b35]/20 text-[#a0998c]"}`} 
+                          <Button
+                            key={time}
+                            variant="outline"
+                            disabled={bookedSlots.includes(time)}
+                            className={`${selectedTime === time ? "bg-[#ff6b35] text-white" : "border-[#ff6b35]/20 text-[#a0998c]"}`}
                             onClick={() => handleTimeSelect(time)}
                           >
                             {time}{bookedSlots.includes(time) && ` (${language === 'gu' ? 'બુક' : language === 'hi' ? 'बुक' : 'Booked'})`}
@@ -897,159 +897,159 @@ const fetchBookingDetails = async (bid: string) => {
           {step === 4 && (
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
               <Script src="https://cdn.uropay.me/uropay-embed.min.js" strategy="lazyOnload" />
-              
-                <div className="mb-8 print:hidden">
-                  <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 ${paymentFailed ? 'bg-red-500/20' : paymentSuccess ? 'bg-green-500/20' : 'bg-[#ff6b35]/20'}`}>
-                    {paymentSuccess ? <Check className="w-12 h-12 text-green-500" /> : paymentFailed ? <AlertCircle className="w-12 h-12 text-red-500" /> : <CreditCard className="w-12 h-12 text-[#ff6b35]" />}
-                  </div>
-                  <h2 className="font-[family-name:var(--font-cinzel)] text-4xl font-bold mb-4 text-gradient-ancient">
-                    {paymentSuccess ? t("Booking Confirmed!") : paymentFailed ? (language === 'gu' ? 'ચુકવણી નિષ્ફળ!' : language === 'hi' ? 'भुगतान विफल!' : 'Payment Failed!') : t("Complete Your Payment")}
-                  </h2>
-                  <p className={`text-xl ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#6b5847]'}`}>
-                    {paymentSuccess 
-                      ? t("Thank you for booking your consultation.") 
-                      : paymentFailed
+
+              <div className="mb-8 print:hidden">
+                <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 ${paymentFailed ? 'bg-red-500/20' : paymentSuccess ? 'bg-green-500/20' : 'bg-[#ff6b35]/20'}`}>
+                  {paymentSuccess ? <Check className="w-12 h-12 text-green-500" /> : paymentFailed ? <AlertCircle className="w-12 h-12 text-red-500" /> : <CreditCard className="w-12 h-12 text-[#ff6b35]" />}
+                </div>
+                <h2 className="font-[family-name:var(--font-cinzel)] text-4xl font-bold mb-4 text-gradient-ancient">
+                  {paymentSuccess ? t("Booking Confirmed!") : paymentFailed ? (language === 'gu' ? 'ચુકવણી નિષ્ફળ!' : language === 'hi' ? 'भुगतान विफल!' : 'Payment Failed!') : t("Complete Your Payment")}
+                </h2>
+                <p className={`text-xl ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#6b5847]'}`}>
+                  {paymentSuccess
+                    ? t("Thank you for booking your consultation.")
+                    : paymentFailed
                       ? (language === 'gu' ? 'તમારી ચુકવણી પ્રક્રિયા નિષ્ફળ થઈ. કૃપા કરી ફરીથી પ્રયાસ કરો.' : language === 'hi' ? 'आपका भुगतान विफल हो गया। कृपया पुनः प्रयास करें।' : 'Your payment could not be processed. Please try again.')
                       : t("Please complete your payment to confirm your consultation.")}
-                  </p>
+                </p>
 
-                  {/* Payment Status Badge */}
-                  {(paymentSuccess || paymentFailed) && (
-                    <div className={`inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full text-sm font-bold ${paymentSuccess ? 'bg-green-500/20 text-green-500 border border-green-500/30' : 'bg-red-500/20 text-red-500 border border-red-500/30'}`}>
-                      {paymentSuccess ? <Check className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
-                      {paymentSuccess ? (language === 'gu' ? 'ચુકવણી સફળ' : language === 'hi' ? 'भुगतान सफल' : 'Payment Successful') : (language === 'gu' ? 'ચુકવણી નિષ્ફળ' : language === 'hi' ? 'भुगतान विफल' : 'Payment Failed')}
-                    </div>
-                  )}
+                {/* Payment Status Badge */}
+                {(paymentSuccess || paymentFailed) && (
+                  <div className={`inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full text-sm font-bold ${paymentSuccess ? 'bg-green-500/20 text-green-500 border border-green-500/30' : 'bg-red-500/20 text-red-500 border border-red-500/30'}`}>
+                    {paymentSuccess ? <Check className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
+                    {paymentSuccess ? (language === 'gu' ? 'ચુકવણી સફળ' : language === 'hi' ? 'भुगतान सफल' : 'Payment Successful') : (language === 'gu' ? 'ચુકવણી નિષ્ફળ' : language === 'hi' ? 'भुगतान विफल' : 'Payment Failed')}
+                  </div>
+                )}
 
-                  {/* Polling indicator - when waiting for payment confirmation */}
-                  {!paymentSuccess && !paymentFailed && bookingId && (
-                    <div className="mt-4 flex items-center justify-center gap-2 text-sm text-[#ff6b35]">
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      {language === 'gu' ? 'ચુકવણીની સ્થિતિ તપાસી રહ્યા છીએ...' : language === 'hi' ? 'भुगतान स्थिति जांच रहे हैं...' : 'Checking payment status...'}
-                    </div>
-                  )}
-                
+                {/* Polling indicator - when waiting for payment confirmation */}
+                {!paymentSuccess && !paymentFailed && bookingId && (
+                  <div className="mt-4 flex items-center justify-center gap-2 text-sm text-[#ff6b35]">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    {language === 'gu' ? 'ચુકવણીની સ્થિતિ તપાસી રહ્યા છીએ...' : language === 'hi' ? 'भुगतान स्थिति जांच रहे हैं...' : 'Checking payment status...'}
+                  </div>
+                )}
+
                 {!paymentSuccess && (
-                    <div className="mt-12 p-8 rounded-3xl border border-[#ff6b35]/20 bg-[#ff6b35]/5 max-w-md mx-auto">
-                      {paymentFailed && (
-                        <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20">
-                          <p className="text-red-500 font-bold text-sm flex items-center gap-2">
-                            <AlertCircle className="w-4 h-4" />
-                            {language === 'gu' ? 'ચુકવણી પ્રક્રિયા નિષ્ફળ થઈ. કૃપા કરી ફરીથી પ્રયાસ કરો.' : language === 'hi' ? 'भुगतान प्रक्रिया विफल हुई। कृपया पुनः प्रयास करें।' : 'Payment processing failed. Please try again.'}
-                          </p>
-                        </div>
-                      )}
-                      <div className="flex justify-between items-center mb-6">
-                        <span className="text-lg opacity-70">{paymentFailed ? (language === 'gu' ? 'ફરી ચૂકવો:' : language === 'hi' ? 'पुनः भुगतान करें:' : 'Retry Payment:') : t('Amount to Pay:')}</span>
+                  <div className="mt-12 p-8 rounded-3xl border border-[#ff6b35]/20 bg-[#ff6b35]/5 max-w-md mx-auto">
+                    {paymentFailed && (
+                      <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20">
+                        <p className="text-red-500 font-bold text-sm flex items-center gap-2">
+                          <AlertCircle className="w-4 h-4" />
+                          {language === 'gu' ? 'ચુકવણી પ્રક્રિયા નિષ્ફળ થઈ. કૃપા કરી ફરીથી પ્રયાસ કરો.' : language === 'hi' ? 'भुगतान प्रक्रिया विफल हुई। कृपया पुनः प्रयास करें।' : 'Payment processing failed. Please try again.'}
+                        </p>
+                      </div>
+                    )}
+                    <div className="flex justify-between items-center mb-6">
+                      <span className="text-lg opacity-70">{paymentFailed ? (language === 'gu' ? 'ફરી ચૂકવો:' : language === 'hi' ? 'पुनः भुगतान करें:' : 'Retry Payment:') : t('Amount to Pay:')}</span>
                       <span className="text-3xl font-bold text-[#ff6b35]">₹ {formatCurrency(getCurrentPrice() / 100)}</span>
                     </div>
                     <div className="flex justify-center">
                       <div className="w-full">
-                          {selectedType === 'online' ? (
-                            <div className="flex justify-center flex-col items-center">
-                              {isOfferValid && offerSettings && offerSettings.is_active && (
-                                <p className="text-xs font-bold text-red-500 mb-2 animate-pulse">{offerSettings.urgency_text}</p>
-                              )}
-                              <a
-                                href="#"
-                                className="uropay-btn w-full inline-flex items-center justify-center bg-[#ff6b35] hover:bg-[#ff8c5e] text-white h-16 rounded-2xl text-xl font-bold shadow-xl shadow-[#ff6b35]/30 transition-all active:scale-95"
-                                data-uropay-api-key="8F7R1DGSMX1EYI5LEVLFL8NLZQM8EKAE"
-                                data-uropay-button-id="XRAY456627"
-                                data-uropay-environment="LIVE"
-                                data-uropay-amount={getCurrentPrice() / 100}
-                                data-uropay-callback-url="/api/payments/callback"
-                                data-uropay-success-url="/payment-success"
-                                data-uropay-failure-url="/payment-failed"
-                              >
-                                {language === 'gu' ? `₹${getCurrentPrice() / 100} માટે હમણાં ખરીદો` : language === 'hi' ? `₹${getCurrentPrice() / 100} के लिए अभी खरीदें` : `Buy Now for ₹${getCurrentPrice() / 100}`}
-                              </a>
-                            </div>
-                            ) : selectedType === 'home-within' ? (
-                              <div className="flex justify-center">
-                                <a
-                                  href="#"
-                                  className="uropay-btn w-full inline-flex items-center justify-center bg-[#ff6b35] hover:bg-[#ff8c5e] text-white h-16 rounded-2xl text-xl font-bold shadow-xl shadow-[#ff6b35]/30 transition-all active:scale-95"
-                                  data-uropay-api-key="8F7R1DGSMX1EYI5LEVLFL8NLZQM8EKAE"
-                                  data-uropay-button-id="ALPHA279545"
-                                  data-uropay-environment="LIVE"
-                                  data-uropay-amount="1101"
-                                  data-uropay-callback-url="/api/payments/callback"
-                                  data-uropay-success-url="/payment-success"
-                                  data-uropay-failure-url="/payment-failed"
-                                >
-                                  {language === 'gu' ? '₹1101 માટે હમણાં ખરીદો' : language === 'hi' ? '₹1101 के लिए अभी खरीदें' : 'Buy Now for ₹1101'}
-                                </a>
-                              </div>
-                            ) : selectedType === 'home-outside' ? (
-                              <div className="flex justify-center">
-                                <a
-                                  href="#"
-                                  className="uropay-btn w-full inline-flex items-center justify-center bg-[#ff6b35] hover:bg-[#ff8c5e] text-white h-16 rounded-2xl text-xl font-bold shadow-xl shadow-[#ff6b35]/30 transition-all active:scale-95"
-                                  data-uropay-api-key="8F7R1DGSMX1EYI5LEVLFL8NLZQM8EKAE"
-                                  data-uropay-button-id="ALPHA413457"
-                                  data-uropay-environment="LIVE"
-                                  data-uropay-amount="2101"
-                                  data-uropay-callback-url="/api/payments/callback"
-                                  data-uropay-success-url="/payment-success"
-                                  data-uropay-failure-url="/payment-failed"
-                                >
-                                  {language === 'gu' ? '₹2101 માટે હમણાં ખરીદો' : language === 'hi' ? '₹2101 के लिए अभी खरીदें' : 'Buy Now for ₹2101'}
-                                </a>
-                              </div>
-                            ) : (
-                            <Button 
-                              onClick={handlePayment}
-                              disabled={isProcessingPayment}
-                              className="w-full bg-[#ff6b35] hover:bg-[#ff8c5e] text-white h-16 rounded-2xl text-xl font-bold shadow-xl shadow-[#ff6b35]/30 flex items-center justify-center gap-3 transition-all active:scale-95"
-                            >
-                              {isProcessingPayment ? <Loader2 className="w-6 h-6 animate-spin" /> : <CreditCard className="w-6 h-6" />}
-                              {t('Pay')} ₹{getCurrentPrice() / 100}
-                            </Button>
+                        {selectedType === 'online' ? (
+                          <div className="flex justify-center flex-col items-center">
+                            {isOfferValid && offerSettings && offerSettings.is_active && (
+                              <p className="text-xs font-bold text-red-500 mb-2 animate-pulse">{offerSettings.urgency_text}</p>
                             )}
-                        </div>
+                            <a
+                              href="#"
+                              className="uropay-btn w-full inline-flex items-center justify-center bg-[#ff6b35] hover:bg-[#ff8c5e] text-white h-16 rounded-2xl text-xl font-bold shadow-xl shadow-[#ff6b35]/30 transition-all active:scale-95"
+                              data-uropay-api-key="8F7R1DGSMX1EYI5LEVLFL8NLZQM8EKAE"
+                              data-uropay-button-id="XRAY456627"
+                              data-uropay-environment="LIVE"
+                              data-uropay-amount={getCurrentPrice() / 100}
+                              data-uropay-callback-url="/api/payments/callback"
+                              data-uropay-success-url="/payment-success"
+                              data-uropay-failure-url="/payment-failed"
+                            >
+                              {language === 'gu' ? `₹${getCurrentPrice() / 100} માટે હમણાં ખરીદો` : language === 'hi' ? `₹${getCurrentPrice() / 100} के लिए अभी खरीदें` : `Buy Now for ₹${getCurrentPrice() / 100}`}
+                            </a>
+                          </div>
+                        ) : selectedType === 'home-within' ? (
+                          <div className="flex justify-center">
+                            <a
+                              href="#"
+                              className="uropay-btn w-full inline-flex items-center justify-center bg-[#ff6b35] hover:bg-[#ff8c5e] text-white h-16 rounded-2xl text-xl font-bold shadow-xl shadow-[#ff6b35]/30 transition-all active:scale-95"
+                              data-uropay-api-key="8F7R1DGSMX1EYI5LEVLFL8NLZQM8EKAE"
+                              data-uropay-button-id="ALPHA279545"
+                              data-uropay-environment="LIVE"
+                              data-uropay-amount="1101"
+                              data-uropay-callback-url="/api/payments/callback"
+                              data-uropay-success-url="/payment-success"
+                              data-uropay-failure-url="/payment-failed"
+                            >
+                              {language === 'gu' ? '₹1101 માટે હમણાં ખરીદો' : language === 'hi' ? '₹1101 के लिए अभी खरीदें' : 'Buy Now for ₹1101'}
+                            </a>
+                          </div>
+                        ) : selectedType === 'home-outside' ? (
+                          <div className="flex justify-center">
+                            <a
+                              href="#"
+                              className="uropay-btn w-full inline-flex items-center justify-center bg-[#ff6b35] hover:bg-[#ff8c5e] text-white h-16 rounded-2xl text-xl font-bold shadow-xl shadow-[#ff6b35]/30 transition-all active:scale-95"
+                              data-uropay-api-key="8F7R1DGSMX1EYI5LEVLFL8NLZQM8EKAE"
+                              data-uropay-button-id="ALPHA413457"
+                              data-uropay-environment="LIVE"
+                              data-uropay-amount="2101"
+                              data-uropay-callback-url="/api/payments/callback"
+                              data-uropay-success-url="/payment-success"
+                              data-uropay-failure-url="/payment-failed"
+                            >
+                              {language === 'gu' ? '₹2101 માટે હમણાં ખરીદો' : language === 'hi' ? '₹2101 के लिए अभी खरીदें' : 'Buy Now for ₹2101'}
+                            </a>
+                          </div>
+                        ) : (
+                          <Button
+                            onClick={handlePayment}
+                            disabled={isProcessingPayment}
+                            className="w-full bg-[#ff6b35] hover:bg-[#ff8c5e] text-white h-16 rounded-2xl text-xl font-bold shadow-xl shadow-[#ff6b35]/30 flex items-center justify-center gap-3 transition-all active:scale-95"
+                          >
+                            {isProcessingPayment ? <Loader2 className="w-6 h-6 animate-spin" /> : <CreditCard className="w-6 h-6" />}
+                            {t('Pay')} ₹{getCurrentPrice() / 100}
+                          </Button>
+                        )}
                       </div>
-                      
-                      <p className={`mt-6 text-sm font-medium ${theme === 'dark' ? 'text-amber-500' : 'text-amber-700'}`}>
-                        <AlertCircle className="w-4 h-4 inline mr-2" />
-                        {language === 'gu' 
-                          ? 'તમારો ઇન્વૉઇસ નંબર લખી લેજો અને રિસીપ્ટનો સ્ક્રીનશોટ પ્રૂફ માટે રાખો. જો જ્યોતિષી માંગે તો આપવો જરૂરી છે.' 
-                          : language === 'hi' 
-                          ? 'अपना इनवॉइस नंबर लिख लें और रसीद का स्क्रीनशॉट प्रमाण के लिए रखें। यदि ज्योतिषी मांगे तो देना जरूरी है।' 
-                          : 'Please note down your invoice number and keep a screenshot of the receipt as proof. It is mandatory to provide if the astrologer asks.'}
-                      </p>
                     </div>
-                  )}
-                </div>
+
+                    <p className={`mt-6 text-sm font-medium ${theme === 'dark' ? 'text-amber-500' : 'text-amber-700'}`}>
+                      <AlertCircle className="w-4 h-4 inline mr-2" />
+                      {language === 'gu'
+                        ? 'તમારો ઇન્વૉઇસ નંબર લખી લેજો અને રિસીપ્ટનો સ્ક્રીનશોટ પ્રૂફ માટે રાખો. જો જ્યોતિષી માંગે તો આપવો જરૂરી છે.'
+                        : language === 'hi'
+                          ? 'अपना इनवॉइस नंबर लिख लें और रसीद का स्क्रीनशॉट प्रमाण के लिए रखें। यदि ज्योतिषी मांगे तो देना जरूरी है।'
+                          : 'Please note down your invoice number and keep a screenshot of the receipt as proof. It is mandatory to provide if the astrologer asks.'}
+                    </p>
+                  </div>
+                )}
+              </div>
 
               <div className="mt-12 mb-12 text-left">
                 <div id="booking-receipt" className={`relative p-8 rounded-xl shadow-lg border transition-all duration-300 ${theme === 'dark' ? 'bg-[#12121a] border-[#ff6b35] text-[#f5f0e8]' : 'bg-[#fdfbf7] border-[#e5e7eb] text-[#1a1a2e]'}`}>
                   <div className="relative z-10">
-                      <div className={`flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-6 border-b ${theme === 'dark' ? 'border-[#333333]' : 'border-[#e5e7eb]'}`}>
-                        <div className="flex items-center gap-4 mb-4 md:mb-0">
-                          <img 
-src="https://yiuhyqfkdnuzalqyxshe.supabase.co/storage/v1/object/sign/logo/logo_withoutname-removebg.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82M2M4NzEzYy0zNWNkLTQ0ZWEtYTQ1ZS04YjdiZWUwMGJhOTMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJsb2dvL2xvZ29fd2l0aG91dG5hbWUtcmVtb3ZlYmcucG5nIiwiaWF0IjoxNzY3MjQ5Nzk3LCJleHAiOjE3OTg3ODU3OTd9.t7yqIWFi065m7keMdas28eYxqIKwAYI06LTu6FOw2nc" 
-                              alt="Logo" 
-                              width={60} 
-                              height={60} 
-                              className="rounded-full"
-                              crossOrigin="anonymous"
-                          />
-                          <div>
-                            <h4 className="font-[family-name:var(--font-cinzel)] text-2xl font-bold text-[#ff6b35]">कात्यायनी ज्योतिष</h4>
-                            <p className={`text-[10px] uppercase tracking-wider ${theme === 'dark' ? 'text-[#888888]' : 'text-[#666666]'} font-semibold`}>Vedic Wisdom for Modern Destinies</p>
-                          </div>
+                    <div className={`flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-6 border-b ${theme === 'dark' ? 'border-[#333333]' : 'border-[#e5e7eb]'}`}>
+                      <div className="flex items-center gap-4 mb-4 md:mb-0">
+                        <img
+                          src="https://yiuhyqfkdnuzalqyxshe.supabase.co/storage/v1/object/sign/logo/logo_withoutname-removebg.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV82M2M4NzEzYy0zNWNkLTQ0ZWEtYTQ1ZS04YjdiZWUwMGJhOTMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJsb2dvL2xvZ29fd2l0aG91dG5hbWUtcmVtb3ZlYmcucG5nIiwiaWF0IjoxNzY3MjQ5Nzk3LCJleHAiOjE3OTg3ODU3OTd9.t7yqIWFi065m7keMdas28eYxqIKwAYI06LTu6FOw2nc"
+                          alt="Logo"
+                          width={60}
+                          height={60}
+                          className="rounded-full"
+                          crossOrigin="anonymous"
+                        />
+                        <div>
+                          <h4 className="font-[family-name:var(--font-cinzel)] text-2xl font-bold text-[#ff6b35]">कात्यायनी ज्योतिष</h4>
+                          <p className={`text-[10px] uppercase tracking-wider ${theme === 'dark' ? 'text-[#888888]' : 'text-[#666666]'} font-semibold`}>Vedic Wisdom for Modern Destinies</p>
                         </div>
+                      </div>
                       <div className="text-left md:text-right">
-                          {invoiceNumber && (
-                              <p className="text-lg font-black text-[#ff6b35] mb-1">{t('Invoice #:')} {invoiceNumber}</p>
-                            )}
-                            {paymentTransactionId && (
-                              <p className={`text-xs font-bold ${theme === 'dark' ? 'text-green-400' : 'text-green-600'}`}>
-                                {language === 'gu' ? 'ટ્રાન્ઝેક્શન ID:' : language === 'hi' ? 'ट्रांज़ैक्शन ID:' : 'Transaction ID:'} {paymentTransactionId}
-                              </p>
-                            )}
-                            <p className={`text-xs font-bold ${theme === 'dark' ? 'text-[#888888]' : 'text-[#666666]'}`}>{t('Issued on:')} {new Date().toLocaleDateString(language === 'en' ? 'en-IN' : language === 'hi' ? 'hi-IN' : 'gu-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                        </div>
+                        {invoiceNumber && (
+                          <p className="text-lg font-black text-[#ff6b35] mb-1">{t('Invoice #:')} {invoiceNumber}</p>
+                        )}
+                        {paymentTransactionId && (
+                          <p className={`text-xs font-bold ${theme === 'dark' ? 'text-green-400' : 'text-green-600'}`}>
+                            {language === 'gu' ? 'ટ્રાન્ઝેક્શન ID:' : language === 'hi' ? 'ट्रांज़ैक्शन ID:' : 'Transaction ID:'} {paymentTransactionId}
+                          </p>
+                        )}
+                        <p className={`text-xs font-bold ${theme === 'dark' ? 'text-[#888888]' : 'text-[#666666]'}`}>{t('Issued on:')} {new Date().toLocaleDateString(language === 'en' ? 'en-IN' : language === 'hi' ? 'hi-IN' : 'gu-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
@@ -1097,9 +1097,9 @@ src="https://yiuhyqfkdnuzalqyxshe.supabase.co/storage/v1/object/sign/logo/logo_w
                     </div>
 
                     <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-                        <div className={`px-6 py-3 rounded-xl text-[11px] font-bold uppercase tracking-widest shadow-sm border-2 ${paymentSuccess ? "bg-[#f0fdf4]/10 border-green-500 text-green-500" : paymentFailed ? "bg-[#fef2f2]/10 border-red-500 text-red-500" : "bg-[#fff7ed]/10 border-orange-500 text-orange-500"}`}>
-                          {paymentSuccess ? t("Booking Confirmed") : paymentFailed ? t("Payment Failed") : t("Status: Payment Pending")}
-                        </div>
+                      <div className={`px-6 py-3 rounded-xl text-[11px] font-bold uppercase tracking-widest shadow-sm border-2 ${paymentSuccess ? "bg-[#f0fdf4]/10 border-green-500 text-green-500" : paymentFailed ? "bg-[#fef2f2]/10 border-red-500 text-red-500" : "bg-[#fff7ed]/10 border-orange-500 text-orange-500"}`}>
+                        {paymentSuccess ? t("Booking Confirmed") : paymentFailed ? t("Payment Failed") : t("Status: Payment Pending")}
+                      </div>
                       <div className="text-center md:text-right">
                         <p className={`text-xs italic mb-2 ${theme === 'dark' ? 'text-[#cccccc]' : 'text-[#4b5563]'} font-medium`}>"असतो મા સદ્ગમય । તમસો મા જ્યોતિર્ગમય ।"</p>
                         <p className={`text-[9px] uppercase tracking-widest ${theme === 'dark' ? 'text-[#444444]' : 'text-[#9ca3af]'} font-bold`}>{t('Katyaayani Jyotish • Ahmedabad • +91 98249 29588')}</p>
@@ -1109,125 +1109,125 @@ src="https://yiuhyqfkdnuzalqyxshe.supabase.co/storage/v1/object/sign/logo/logo_w
                 </div>
               </div>
 
-<div className="flex flex-col sm:flex-row justify-center gap-4 mt-8 print:hidden">
-                     {paymentFailed && (
-                       <Button onClick={handleRetryPayment} className="bg-red-500 hover:bg-red-600 text-white px-8 font-bold">
-                         <AlertCircle className="w-4 h-4 mr-2" />
-                         {language === 'gu' ? 'ફરીથી ચુકવણી કરો' : language === 'hi' ? 'पुनः भुगतान करें' : 'Retry Payment'}
-                       </Button>
-                     )}
-                     {!paymentSuccess && !paymentFailed && (
-                       <Button variant="ghost" onClick={() => setStep(3)} className="text-[#a0998c]">{t('Change details')}</Button>
-                     )}
-                     <Link href="/"><Button className="bg-[#ff6b35]/10 hover:bg-[#ff8c5e] text-[#ff6b35] border border-[#ff6b35]/20 px-8">{t('Return Home')}</Button></Link>
-                     {paymentSuccess && (
-                       <>
-                         <Button onClick={handleDownloadInvoice} className="bg-[#ff6b35] hover:bg-[#ff8c5e] text-white px-8">
-                           <Download className="w-4 h-4 mr-2" />
-                           {language === 'gu' ? 'ઇન્વૉઇસ ડાઉનલોડ' : language === 'hi' ? 'इनवॉइस डाउनलोड' : 'Download Invoice'}
-                         </Button>
-                         <Link href="/profile"><Button variant="outline" className="border-[#ff6b35] text-[#ff6b35]">{t('View My Bookings')}</Button></Link>
-                       </>
-                     )}
-                   </div>
-              </motion.div>
-            )}
-          </div>
-        </main>
+              <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8 print:hidden">
+                {paymentFailed && (
+                  <Button onClick={handleRetryPayment} className="bg-red-500 hover:bg-red-600 text-white px-8 font-bold">
+                    <AlertCircle className="w-4 h-4 mr-2" />
+                    {language === 'gu' ? 'ફરીથી ચુકવણી કરો' : language === 'hi' ? 'पुनः भुगतान करें' : 'Retry Payment'}
+                  </Button>
+                )}
+                {!paymentSuccess && !paymentFailed && (
+                  <Button variant="ghost" onClick={() => setStep(3)} className="text-[#a0998c]">{t('Change details')}</Button>
+                )}
+                <Link href="/"><Button className="bg-[#ff6b35]/10 hover:bg-[#ff8c5e] text-[#ff6b35] border border-[#ff6b35]/20 px-8">{t('Return Home')}</Button></Link>
+                {paymentSuccess && (
+                  <>
+                    <Button onClick={handleDownloadInvoice} className="bg-[#ff6b35] hover:bg-[#ff8c5e] text-white px-8">
+                      <Download className="w-4 h-4 mr-2" />
+                      {language === 'gu' ? 'ઇન્વૉઇસ ડાઉનલોડ' : language === 'hi' ? 'इनवॉइस डाउनलोड' : 'Download Invoice'}
+                    </Button>
+                    <Link href="/profile"><Button variant="outline" className="border-[#ff6b35] text-[#ff6b35]">{t('View My Bookings')}</Button></Link>
+                  </>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </div>
+      </main>
 
-        <Dialog open={showPaymentSuccessPopup} onOpenChange={setShowPaymentSuccessPopup}>
-          <DialogContent className={`${theme === 'dark' ? 'bg-[#1a1a2e] border-[#ff6b35]/30' : 'bg-white border-[#ff6b35]/20'} max-w-md`}>
-            <DialogHeader className="text-center">
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", duration: 0.5 }}
-                className="w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-4"
-              >
-                <PartyPopper className="w-10 h-10 text-green-500" />
-              </motion.div>
-              <DialogTitle className={`font-[family-name:var(--font-cinzel)] text-2xl font-bold ${theme === 'dark' ? 'text-[#f5f0e8]' : 'text-[#4a3f35]'}`}>
-                {language === 'gu' ? 'ચુકવણી સફળ!' : language === 'hi' ? 'भुगतान सफल!' : 'Payment Successful!'}
-              </DialogTitle>
-              <DialogDescription className={`${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'} text-base`}>
-                {language === 'gu' 
-                  ? 'તમારી બુકિંગ સફળતાપૂર્વક પૂર્ણ થઈ ગઈ છે.'
-                  : language === 'hi'
+      <Dialog open={showPaymentSuccessPopup} onOpenChange={setShowPaymentSuccessPopup}>
+        <DialogContent className={`${theme === 'dark' ? 'bg-[#1a1a2e] border-[#ff6b35]/30' : 'bg-white border-[#ff6b35]/20'} max-w-md`}>
+          <DialogHeader className="text-center">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className="w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-4"
+            >
+              <PartyPopper className="w-10 h-10 text-green-500" />
+            </motion.div>
+            <DialogTitle className={`font-[family-name:var(--font-cinzel)] text-2xl font-bold ${theme === 'dark' ? 'text-[#f5f0e8]' : 'text-[#4a3f35]'}`}>
+              {language === 'gu' ? 'ચુકવણી સફળ!' : language === 'hi' ? 'भुगतान सफल!' : 'Payment Successful!'}
+            </DialogTitle>
+            <DialogDescription className={`${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'} text-base`}>
+              {language === 'gu'
+                ? 'તમારી બુકિંગ સફળતાપૂર્વક પૂર્ણ થઈ ગઈ છે.'
+                : language === 'hi'
                   ? 'आपकी बुकिंग सफलतापूर्वक पूर्ण हो गई है।'
                   : 'Your booking has been successfully completed.'}
-              </DialogDescription>
-            </DialogHeader>
-            
-            <div className="mt-6 space-y-4">
-              {invoiceNumber && (
-                <div className={`p-4 rounded-xl border-2 border-dashed ${theme === 'dark' ? 'bg-[#0a0a0f] border-[#ff6b35]/40' : 'bg-[#fff7ed] border-[#ff6b35]/40'}`}>
-                  <p className={`text-xs uppercase tracking-widest font-bold mb-2 ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'}`}>
-                    {language === 'gu' ? 'તમારો ઇન્વૉઇસ નંબર' : language === 'hi' ? 'आपका इनवॉइस नंबर' : 'Your Invoice Number'}
-                  </p>
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="font-mono text-2xl font-black text-[#ff6b35] tracking-wider">{invoiceNumber}</span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          navigator.clipboard.writeText(invoiceNumber);
-                          setCopiedInvoice(true);
-                          setTimeout(() => setCopiedInvoice(false), 2000);
-                        }}
-                        className="border-[#ff6b35]/30 text-[#ff6b35] hover:bg-[#ff6b35]/10"
-                      >
-                        {copiedInvoice ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                      </Button>
-                    </div>
-                    {paymentTransactionId && (
-                      <p className={`text-xs font-bold mt-2 ${theme === 'dark' ? 'text-green-400' : 'text-green-600'}`}>
-                        {language === 'gu' ? 'ટ્રાન્ઝેક્શન ID:' : language === 'hi' ? 'ट्रांज़ैक्शन ID:' : 'Transaction ID:'} {paymentTransactionId}
-                      </p>
-                    )}
-                  </div>
-                )}
+            </DialogDescription>
+          </DialogHeader>
 
-              {selectedType === 'online' && (
-                <div className={`p-4 rounded-xl ${theme === 'dark' ? 'bg-green-500/10 border border-green-500/20' : 'bg-green-50 border border-green-200'}`}>
-                  <p className="text-sm font-bold text-green-600 mb-2 flex items-center gap-2">
-                    <Video className="w-4 h-4" />
-                    {language === 'gu' ? 'Google Meet માટે' : language === 'hi' ? 'Google Meet के लिए' : 'For Google Meet'}
+          <div className="mt-6 space-y-4">
+            {invoiceNumber && (
+              <div className={`p-4 rounded-xl border-2 border-dashed ${theme === 'dark' ? 'bg-[#0a0a0f] border-[#ff6b35]/40' : 'bg-[#fff7ed] border-[#ff6b35]/40'}`}>
+                <p className={`text-xs uppercase tracking-widest font-bold mb-2 ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'}`}>
+                  {language === 'gu' ? 'તમારો ઇન્વૉઇસ નંબર' : language === 'hi' ? 'आपका इनवॉइस नंबर' : 'Your Invoice Number'}
+                </p>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="font-mono text-2xl font-black text-[#ff6b35] tracking-wider">{invoiceNumber}</span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      navigator.clipboard.writeText(invoiceNumber);
+                      setCopiedInvoice(true);
+                      setTimeout(() => setCopiedInvoice(false), 2000);
+                    }}
+                    className="border-[#ff6b35]/30 text-[#ff6b35] hover:bg-[#ff6b35]/10"
+                  >
+                    {copiedInvoice ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                  </Button>
+                </div>
+                {paymentTransactionId && (
+                  <p className={`text-xs font-bold mt-2 ${theme === 'dark' ? 'text-green-400' : 'text-green-600'}`}>
+                    {language === 'gu' ? 'ટ્રાન્ઝેક્શન ID:' : language === 'hi' ? 'ट्रांज़ैक्शन ID:' : 'Transaction ID:'} {paymentTransactionId}
                   </p>
-                  <p className={`text-xs ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'}`}>
-                    {language === 'gu' 
-                      ? 'આ ઇન્વૉઇસ નંબર Google Meet સત્રમાં જોડાવા માટે જરૂરી છે. તેને સાચવી રાખો!'
-                      : language === 'hi'
+                )}
+              </div>
+            )}
+
+            {selectedType === 'online' && (
+              <div className={`p-4 rounded-xl ${theme === 'dark' ? 'bg-green-500/10 border border-green-500/20' : 'bg-green-50 border border-green-200'}`}>
+                <p className="text-sm font-bold text-green-600 mb-2 flex items-center gap-2">
+                  <Video className="w-4 h-4" />
+                  {language === 'gu' ? 'Google Meet માટે' : language === 'hi' ? 'Google Meet के लिए' : 'For Google Meet'}
+                </p>
+                <p className={`text-xs ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'}`}>
+                  {language === 'gu'
+                    ? 'આ ઇન્વૉઇસ નંબર Google Meet સત્રમાં જોડાવા માટે જરૂરી છે. તેને સાચવી રાખો!'
+                    : language === 'hi'
                       ? 'यह इनवॉइस नंबर Google Meet सत्र में शामिल होने के लिए आवश्यक है। इसे सहेज कर रखें!'
                       : 'This invoice number is required to join the Google Meet session. Save it!'}
-                  </p>
-                  <Link href="/online-consulting">
-                    <Button className="w-full mt-3 bg-green-500 hover:bg-green-600 text-white font-bold">
-                      <Video className="w-4 h-4 mr-2" />
-                      {language === 'gu' ? 'Google Meet માં જોડાઓ' : language === 'hi' ? 'Google Meet से जुड़ें' : 'Join Google Meet'}
-                    </Button>
-                  </Link>
-                </div>
-              )}
+                </p>
+                <Link href="/online-consulting">
+                  <Button className="w-full mt-3 bg-green-500 hover:bg-green-600 text-white font-bold">
+                    <Video className="w-4 h-4 mr-2" />
+                    {language === 'gu' ? 'Google Meet માં જોડાઓ' : language === 'hi' ? 'Google Meet से जुड़ें' : 'Join Google Meet'}
+                  </Button>
+                </Link>
+              </div>
+            )}
 
-                <Button
-                  onClick={handleDownloadInvoice}
-                  variant="outline"
-                  className="w-full border-[#ff6b35] text-[#ff6b35] hover:bg-[#ff6b35]/10 font-bold py-5 rounded-xl"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  {language === 'gu' ? 'ઇન્વૉઇસ ડાઉનલોડ કરો' : language === 'hi' ? 'इनवॉइस डाउनलोड करें' : 'Download Invoice'}
-                </Button>
+            <Button
+              onClick={handleDownloadInvoice}
+              variant="outline"
+              className="w-full border-[#ff6b35] text-[#ff6b35] hover:bg-[#ff6b35]/10 font-bold py-5 rounded-xl"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              {language === 'gu' ? 'ઇન્વૉઇસ ડાઉનલોડ કરો' : language === 'hi' ? 'इनवॉइस डाउनलोड करें' : 'Download Invoice'}
+            </Button>
 
-                <Button
-                  onClick={() => setShowPaymentSuccessPopup(false)}
-                  className="w-full bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-bold py-5 rounded-xl"
-                >
-                {language === 'gu' ? 'બંધ કરો' : language === 'hi' ? 'बंद करें' : 'Close'}
-              </Button>
-            </div>
-          </DialogContent>
-          </Dialog>
-        <Footer />
-        </div>
-      );
-    }
+            <Button
+              onClick={() => setShowPaymentSuccessPopup(false)}
+              className="w-full bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-bold py-5 rounded-xl"
+            >
+              {language === 'gu' ? 'બંધ કરો' : language === 'hi' ? 'बंद करें' : 'Close'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+      <Footer />
+    </div>
+  );
+}

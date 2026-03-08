@@ -141,7 +141,7 @@ export default function PricingPanel({ isDark, t, setSuccess, setError }: Props)
       <div className={`p-4 rounded-xl border flex items-start gap-3 ${isDark ? "bg-amber-500/5 border-amber-500/15 text-amber-300/80" : "bg-amber-50 border-amber-200 text-amber-800"}`}>
         <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
         <p className="text-sm">
-          {t("Price changes take effect immediately on the booking page. Enter price in rupees (e.g. 851 for ₹851).")}
+          {t("Price changes take effect immediately on the booking page. Enter price in rupees (e.g. 501 for ₹501).")}
         </p>
       </div>
 
@@ -169,7 +169,7 @@ export default function PricingPanel({ isDark, t, setSuccess, setError }: Props)
                           value={Math.round((form.price || 0) / 100)}
                           onChange={(e) => setForm({ ...form, price: Number(e.target.value) * 100 })}
                           className={`pl-9 ${isDark ? "bg-white/5 border-white/10" : ""}`}
-                          placeholder="e.g. 851"
+                          placeholder="e.g. 501"
                         />
                       </div>
                     </div>

@@ -15,19 +15,28 @@ export function PriceDisplay({ amount, className = "", showBadge = true, showUrg
   const { theme } = useTheme();
   const { offer, isOfferValid, loading } = useOffer();
 
-  // If loading or offer is not valid OR the amount passed doesn't match the original offer price (851),
-  // just show the normal amount without strike-through.
-  if (loading || !isOfferValid || !offer || Number(amount) !== offer.original_price) {
+  // If loading or offer is not valid, just show the normal amount.
+  if (loading || !isOfferValid || !offer) {
     return <span className={`font-black ${className}`}>₹ {amount}</span>;
   }
 
-  // Offer is valid! Show strike-through and badge.
+  // Check if we should show the offer display
+  const isTargetAmount = Number(amount) === offer.original_price || Number(amount) === offer.offer_price;
+  if (!isTargetAmount) {
+    return <span className={`font-black ${className}`}>₹ {amount}</span>;
+  }
+
+  const showStrikeThrough = Number(amount) === offer.original_price;
+
+  // Offer is valid! Show badge and possibly strike-through.
   return (
     <div className="flex flex-col items-start gap-1">
       <div className="flex items-center gap-2">
-        <span className={`text-sm line-through ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
-          ₹{offer.original_price}
-        </span>
+        {showStrikeThrough && (
+          <span className={`text-sm line-through ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
+            ₹{offer.original_price}
+          </span>
+        )}
         <span className={`font-black text-red-500 ${className}`}>
           ₹{offer.offer_price}
         </span>

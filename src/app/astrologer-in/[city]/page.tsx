@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { 
-  Star, Moon, Sun, Sparkles, MapPin, 
+import {
+  Star, Moon, Sun, Sparkles, MapPin,
   CheckCircle, IndianRupee, Video, Home,
   ChevronRight, Calendar
 } from "lucide-react";
@@ -19,47 +19,47 @@ import Link from "next/link";
 
 // Predefined city data for SEO optimization
 const cityData: Record<string, { gu: string, hi: string, description: string, title: string }> = {
-  "ahmedabad": { 
-    gu: "અમદાવાદ", 
-    hi: "अहमदाबाद", 
+  "ahmedabad": {
+    gu: "અમદાવાદ",
+    hi: "अहमदाबाद",
     title: "Best Astrologer in Ahmedabad",
-    description: "Best Astrologer in Ahmedabad for Kundali analysis, Vastu Shastra, and Vedic remedies by Katyaayani Astrologer." 
+    description: "Best Astrologer in Ahmedabad for Kundali analysis, Vastu Shastra, and Vedic remedies by Katyaayani Astrologer."
   },
-  "surat": { 
-    gu: "સુરત", 
-    hi: "सूरत", 
+  "surat": {
+    gu: "સુરત",
+    hi: "सूरत",
     title: "Expert Astrologer in Surat",
-    description: "Expert Vedic Astrology services in Surat. Get accurate horoscope readings and personalized solutions today." 
+    description: "Expert Vedic Astrology services in Surat. Get accurate horoscope readings and personalized solutions today."
   },
-  "vadodara": { 
-    gu: "વડોદરા", 
-    hi: "वडોદરા", 
+  "vadodara": {
+    gu: "વડોદરા",
+    hi: "वडોદરા",
     title: "Trusted Astrologer in Vadodara",
-    description: "Professional Astrology consultation in Vadodara. Specialized in Career, Marriage, and Health predictions." 
+    description: "Professional Astrology consultation in Vadodara. Specialized in Career, Marriage, and Health predictions."
   },
-  "rajkot": { 
-    gu: "રાજકોટ", 
-    hi: "राजकोट", 
+  "rajkot": {
+    gu: "રાજકોટ",
+    hi: "राजकोट",
     title: "Famous Astrologer in Rajkot",
-    description: "Famous Astrologer in Rajkot providing ancient Vedic wisdom for modern problems by Rudram Joshi." 
+    description: "Famous Astrologer in Rajkot providing ancient Vedic wisdom for modern problems by Rudram Joshi."
   },
-  "mumbai": { 
-    gu: "મુંબઈ", 
-    hi: "मुंबई", 
+  "mumbai": {
+    gu: "મુંબઈ",
+    hi: "मुंबई",
     title: "Top Astrologer in Mumbai",
-    description: "Top-rated Astrology services in Mumbai. Connect with Katyaayani Astrologer for online and in-person sessions." 
+    description: "Top-rated Astrology services in Mumbai. Connect with Katyaayani Astrologer for online and in-person sessions."
   },
-  "delhi": { 
-    gu: "દિલ્હી", 
-    hi: "दिल्ली", 
+  "delhi": {
+    gu: "દિલ્હી",
+    hi: "दिल्ली",
     title: "Best Astrologer in Delhi NCR",
-    description: "Leading Vedic Astrologer in Delhi NCR. Get your birth chart analyzed by experts for clear life guidance." 
+    description: "Leading Vedic Astrologer in Delhi NCR. Get your birth chart analyzed by experts for clear life guidance."
   },
-  "gandhinagar": { 
-    gu: "ગાંધીનગર", 
-    hi: "गांधीनगर", 
+  "gandhinagar": {
+    gu: "ગાંધીનગર",
+    hi: "गांधीनगर",
     title: "Trusted Astrologer in Gandhinagar",
-    description: "Trusted Astrology consultation in Gandhinagar. Expertise in Vastu, Kundali, and astrological remedies." 
+    description: "Trusted Astrology consultation in Gandhinagar. Expertise in Vastu, Kundali, and astrological remedies."
   },
   "bangalore": {
     gu: "બેંગલુરુ",
@@ -139,20 +139,20 @@ export default function CitySEOPage() {
   const params = useParams();
   const citySlug = typeof params.city === 'string' ? params.city.toLowerCase() : '';
   const cityName = citySlug.charAt(0).toUpperCase() + citySlug.slice(1);
-  const data = cityData[citySlug] || { 
-    gu: cityName, 
-    hi: cityName, 
+  const data = cityData[citySlug] || {
+    gu: cityName,
+    hi: cityName,
     title: `Best Astrologer in ${cityName}`,
-    description: `Expert Astrology services in ${cityName}. Connect with Katyaayani Astrologer for ancient Vedic wisdom and life solutions.` 
+    description: `Expert Astrology services in ${cityName}. Connect with Katyaayani Astrologer for ancient Vedic wisdom and life solutions.`
   };
-  
+
   const { theme } = useTheme();
   const { language, t } = useTranslation();
 
   // Set document title for SEO on client side (since it's a client component)
   useEffect(() => {
     document.title = `${data.title} | Katyaayani Astrologer`;
-    
+
     // Add meta description dynamically
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
@@ -166,14 +166,14 @@ export default function CitySEOPage() {
 
       <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden pt-20">
         <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1436891620584-47fd0e565afb?q=80&w=2000" 
-            alt={`Expert Astrologer in ${cityName}`} 
+          <img
+            src="https://images.unsplash.com/photo-1436891620584-47fd0e565afb?q=80&w=2000"
+            alt={`Expert Astrologer in ${cityName}`}
             className="w-full h-full object-cover opacity-30"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0a0f]" />
         </div>
-        
+
         <div className="relative z-10 text-center px-6 max-w-4xl mt-10">
           {/* Breadcrumbs for SEO */}
           <div className="flex items-center justify-center gap-2 mb-8 text-xs md:text-sm font-medium opacity-60">
@@ -296,7 +296,7 @@ export default function CitySEOPage() {
                       <Video className="w-5 h-5 text-[#ff6b35]" />
                       <span className="font-semibold">Online Session</span>
                     </div>
-                    <PriceDisplay amount={501} className="text-[#ff6b35] text-lg" showBadge={true} showUrgency={false} />
+                    <PriceDisplay amount={851} className="text-[#ff6b35] text-lg" showBadge={true} showUrgency={false} />
                   </div>
                   <div className="flex items-center justify-between p-4 rounded-xl bg-[#ff6b35]/5 border border-[#ff6b35]/10">
                     <div className="flex items-center gap-3">
@@ -318,7 +318,7 @@ export default function CitySEOPage() {
             <Card className={`${theme === 'dark' ? 'bg-[#12121a] border-[#ff6b35]/20' : 'bg-white border-[#ff6b35]/10'} rounded-2xl`}>
               <CardContent className="p-8">
                 <h3 className="font-bold text-lg mb-6 border-b pb-2 flex items-center gap-2">
-                   <MapPin className="w-4 h-4 text-[#ff6b35]" /> Service Locations
+                  <MapPin className="w-4 h-4 text-[#ff6b35]" /> Service Locations
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {Object.keys(cityData).filter(c => c !== citySlug).map(c => (

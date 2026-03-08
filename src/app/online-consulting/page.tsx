@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Video, Phone, MessageCircle, Clock, Globe, Shield, CheckCircle, 
+import {
+  Video, Phone, MessageCircle, Clock, Globe, Shield, CheckCircle,
   Sparkles, Calendar, ArrowRight, ChevronDown, ChevronUp,
   Headphones, Lock, Loader2, KeyRound, ExternalLink, PartyPopper, AlertCircle
 } from "lucide-react";
@@ -132,7 +132,7 @@ export default function OnlineConsultingPage() {
   const [hasOnlineBooking, setHasOnlineBooking] = useState(false);
   const [loading, setLoading] = useState(true);
   const [onlineBooking, setOnlineBooking] = useState<OnlineBooking | null>(null);
-  
+
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [invoiceError, setInvoiceError] = useState("");
   const [verifyingInvoice, setVerifyingInvoice] = useState(false);
@@ -143,39 +143,39 @@ export default function OnlineConsultingPage() {
     setMounted(true);
   }, []);
 
-useEffect(() => {
-      const checkOnlineBooking = async () => {
-        if (!user?.email) {
-          setLoading(false);
-          return;
-        }
-
-        try {
-          const { data, error } = await supabase
-            .from("bookings")
-            .select("id, booking_date, booking_time, status, service_type, payment_status")
-            .eq("email", user.email)
-            .eq("service_type", "online")
-            .in("payment_status", ["pending", "completed", "success"])
-            .order("created_at", { ascending: false })
-            .limit(1)
-            .maybeSingle();
-
-          if (data && !error) {
-            setHasOnlineBooking(true);
-            setOnlineBooking(data);
-          }
-        } catch (err) {
-          console.error("Error checking online booking:", err);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      if (mounted) {
-        checkOnlineBooking();
+  useEffect(() => {
+    const checkOnlineBooking = async () => {
+      if (!user?.email) {
+        setLoading(false);
+        return;
       }
-    }, [user, mounted]);
+
+      try {
+        const { data, error } = await supabase
+          .from("bookings")
+          .select("id, booking_date, booking_time, status, service_type, payment_status")
+          .eq("email", user.email)
+          .eq("service_type", "online")
+          .in("payment_status", ["pending", "completed", "success"])
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (data && !error) {
+          setHasOnlineBooking(true);
+          setOnlineBooking(data);
+        }
+      } catch (err) {
+        console.error("Error checking online booking:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (mounted) {
+      checkOnlineBooking();
+    }
+  }, [user, mounted]);
 
   const handleBookNow = (e: React.MouseEvent) => {
     if (!user) {
@@ -270,17 +270,17 @@ useEffect(() => {
               {language === 'gu' ? 'એક્સક્લુસિવ એક્સેસ' : language === 'hi' ? 'एक्सक्लूसिव एक्सेस' : 'Exclusive Access'}
             </h1>
             <p className={`text-lg mb-8 ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'}`}>
-              {language === 'gu' 
+              {language === 'gu'
                 ? 'આ પેજ ફક્ત ઓનલાઇન કન્સલ્ટિંગ બુક કરનાર ગ્રાહકો માટે ઉપલબ્ધ છે. ઓનલાઇન સત્ર બુક કરો અને પૂર્ણ માહિતી મેળવો.'
                 : language === 'hi'
-                ? 'यह पेज केवल ऑनलाइन कन्सल्टिंग बुक करने वाले ग्राहकों के लिए उपलब्ध है। ऑनलाइन सत्र बुक करें और पूर्ण जानकारी प्राप्त करें।'
-                : 'This page is exclusively available for customers who have booked online consulting. Book an online session to get full access.'}
+                  ? 'यह पेज केवल ऑनलाइन कन्सल्टिंग बुक करने वाले ग्राहकों के लिए उपलब्ध है। ऑनलाइन सत्र बुक करें और पूर्ण जानकारी प्राप्त करें।'
+                  : 'This page is exclusively available for customers who have booked online consulting. Book an online session to get full access.'}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/booking">
-                <Button 
+                <Button
                   onClick={handleBookNow}
-                  size="lg" 
+                  size="lg"
                   className="bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-bold text-lg px-8 py-6 rounded-2xl shadow-lg shadow-[#ff6b35]/25"
                 >
                   <Video className="w-5 h-5 mr-2" />
@@ -289,7 +289,7 @@ useEffect(() => {
               </Link>
             </div>
             <div className={`mt-6 flex justify-center ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'}`}>
-              <PriceDisplay amount={501} className="text-xl" showBadge={true} showUrgency={false} />
+              <PriceDisplay amount={851} className="text-xl" showBadge={true} showUrgency={false} />
               <span className="text-sm self-end mb-1 ml-1"> / 45 {language === 'gu' ? 'મિનિટ' : language === 'hi' ? 'मिनट' : 'minutes'}</span>
             </div>
           </motion.div>
@@ -310,11 +310,11 @@ useEffect(() => {
   };
 
   const whatsappNumber = "919824929588";
-  const whatsappMessage = language === 'gu' 
+  const whatsappMessage = language === 'gu'
     ? "નમસ્તે! મને ઓનલાઇન જ્યોતિષ પરામર્શ વિશે જાણકારી જોઈએ છે."
     : language === 'hi'
-    ? "नमस्ते! मुझे ऑनलाइन ज्योतिष परामर्श के बारे में जानकारी चाहिए।"
-    : "Hello! I would like to know about online astrology consultation.";
+      ? "नमस्ते! मुझे ऑनलाइन ज्योतिष परामर्श के बारे में जानकारी चाहिए।"
+      : "Hello! I would like to know about online astrology consultation.";
 
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#0a0a0f] text-[#f5f0e8]' : 'bg-[#fdfbf7] text-[#4a3f35]'}`}>
@@ -345,34 +345,34 @@ useEffect(() => {
             </h1>
 
             <p className={`text-lg md:text-xl lg:text-2xl mb-8 max-w-3xl mx-auto ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'}`}>
-              {language === 'gu' 
+              {language === 'gu'
                 ? 'ઘરે બેઠા વીડિયો કૉલ દ્વારા પ્રામાણિક વૈદિક જ્યોતિષ પરામર્શ મેળવો. વિશ્વના કોઈપણ ખૂણેથી જોડાઓ.'
                 : language === 'hi'
-                ? 'घर बैठे वीडियो कॉल के माध्यम से प्रामाणिक वैदिक ज्योतिष परामर्श प्राप्त करें। दुनिया के किसी भी कोने से जुड़ें।'
-                : 'Get authentic Vedic astrology consultation via video call from the comfort of your home. Connect from anywhere in the world.'}
+                  ? 'घर बैठे वीडियो कॉल के माध्यम से प्रामाणिक वैदिक ज्योतिष परामर्श प्राप्त करें। दुनिया के किसी भी कोने से जुड़ें।'
+                  : 'Get authentic Vedic astrology consultation via video call from the comfort of your home. Connect from anywhere in the world.'}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <Link href="/booking">
-                <Button 
+                <Button
                   onClick={handleBookNow}
-                  size="lg" 
+                  size="lg"
                   className="bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-bold text-lg px-8 py-6 rounded-2xl shadow-lg shadow-[#ff6b35]/25"
                 >
                   <Video className="w-5 h-5 mr-2" />
                   <span className="flex items-center gap-2">
-                    {language === 'gu' ? 'હવે બુક કરો -' : language === 'hi' ? 'अभी बुक करें -' : 'Book Now -'} 
-                    <PriceDisplay amount={501} className="text-white relative top-[2px]" showBadge={false} showUrgency={false} />
+                    {language === 'gu' ? 'હવે બુક કરો -' : language === 'hi' ? 'अभी बुक करें -' : 'Book Now -'}
+                    <PriceDisplay amount={851} className="text-white relative top-[2px]" showBadge={false} showUrgency={false} />
                   </span>
                 </Button>
               </Link>
-              <a 
+              <a
                 href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   variant="outline"
                   className="border-2 border-green-500 text-green-500 hover:bg-green-500/10 font-bold text-lg px-8 py-6 rounded-2xl"
                 >
@@ -396,146 +396,146 @@ useEffect(() => {
                 </motion.div>
               ))}
             </div>
-</motion.div>
-          </div>
-        </section>
+          </motion.div>
+        </div>
+      </section>
 
-        {/* Google Meet Code Entry Section */}
-        <section className={`py-16 px-6 ${theme === 'dark' ? 'bg-gradient-to-b from-[#0f0f15] to-[#0a0a0f]' : 'bg-gradient-to-b from-[#f0e6d8] to-[#fdfbf7]'}`}>
-          <div className="max-w-2xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center"
-            >
-              <Card className={`${theme === 'dark' ? 'bg-[#1a1a2e] border-[#ff6b35]/30' : 'bg-white border-[#ff6b35]/20'} overflow-hidden`}>
-                <CardContent className="p-8 md:p-10">
-                  <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-6">
-                    <KeyRound className="w-8 h-8 text-green-500" />
-                  </div>
-                  
-                  <h3 className={`font-[family-name:var(--font-cinzel)] text-2xl md:text-3xl font-bold mb-3 ${theme === 'dark' ? 'text-[#f5f0e8]' : 'text-[#4a3f35]'}`}>
-                    {language === 'gu' ? 'Google Meet માં જોડાઓ' : language === 'hi' ? 'Google Meet से जुड़ें' : 'Join Google Meet'}
-                  </h3>
-                  
-                  <p className={`mb-6 ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'}`}>
-                    {language === 'gu' 
-                      ? 'પેમેન્ટ સફળ થયા પછી WhatsApp પર મળેલ બિલ/ઇન્વૉઇસ નંબર અહીં દાખલ કરો'
-                      : language === 'hi'
+      {/* Google Meet Code Entry Section */}
+      <section className={`py-16 px-6 ${theme === 'dark' ? 'bg-gradient-to-b from-[#0f0f15] to-[#0a0a0f]' : 'bg-gradient-to-b from-[#f0e6d8] to-[#fdfbf7]'}`}>
+        <div className="max-w-2xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <Card className={`${theme === 'dark' ? 'bg-[#1a1a2e] border-[#ff6b35]/30' : 'bg-white border-[#ff6b35]/20'} overflow-hidden`}>
+              <CardContent className="p-8 md:p-10">
+                <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-6">
+                  <KeyRound className="w-8 h-8 text-green-500" />
+                </div>
+
+                <h3 className={`font-[family-name:var(--font-cinzel)] text-2xl md:text-3xl font-bold mb-3 ${theme === 'dark' ? 'text-[#f5f0e8]' : 'text-[#4a3f35]'}`}>
+                  {language === 'gu' ? 'Google Meet માં જોડાઓ' : language === 'hi' ? 'Google Meet से जुड़ें' : 'Join Google Meet'}
+                </h3>
+
+                <p className={`mb-6 ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'}`}>
+                  {language === 'gu'
+                    ? 'પેમેન્ટ સફળ થયા પછી WhatsApp પર મળેલ બિલ/ઇન્વૉઇસ નંબર અહીં દાખલ કરો'
+                    : language === 'hi'
                       ? 'भुगतान सफल होने के बाद WhatsApp पर मिला बिल/इनवॉइस नंबर यहां दर्ज करें'
                       : 'Enter the bill/invoice number received via WhatsApp after successful payment'}
-                  </p>
+                </p>
 
-                    <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                      <Input
-                        type="text"
-                        placeholder={language === 'gu' ? 'ઇન્વૉઇસ નંબર (દા.ત. ASTRO26001)' : language === 'hi' ? 'इनवॉइस नंबर (उदा. ASTRO26001)' : 'Invoice No. (e.g. ASTRO26001)'}
-                        value={invoiceNumber}
-                        onChange={(e) => {
-                          setInvoiceNumber(e.target.value.toUpperCase());
-                          setInvoiceError("");
-                        }}
-                        className={`text-center text-lg tracking-widest uppercase font-bold ${theme === 'dark' ? 'bg-[#0a0a0f] border-[#ff6b35]/30' : 'bg-[#fdfbf7] border-[#ff6b35]/30'} focus:border-green-500`}
-                          maxLength={20}
-                        />
-                      <Button
-                        onClick={handleVerifyInvoice}
-                        disabled={verifyingInvoice || !invoiceNumber.trim()}
-                        className="bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-5 rounded-xl"
-                      >
-                        {verifyingInvoice ? (
-                          <Loader2 className="w-5 h-5 animate-spin" />
-                        ) : (
-                          <>
-                            <Video className="w-5 h-5 mr-2" />
-                            {language === 'gu' ? 'જોડાઓ' : language === 'hi' ? 'जुड़ें' : 'Join'}
-                          </>
-                        )}
-                      </Button>
-                    </div>
+                <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                  <Input
+                    type="text"
+                    placeholder={language === 'gu' ? 'ઇન્વૉઇસ નંબર (દા.ત. ASTRO26001)' : language === 'hi' ? 'इनवॉइस नंबर (उदा. ASTRO26001)' : 'Invoice No. (e.g. ASTRO26001)'}
+                    value={invoiceNumber}
+                    onChange={(e) => {
+                      setInvoiceNumber(e.target.value.toUpperCase());
+                      setInvoiceError("");
+                    }}
+                    className={`text-center text-lg tracking-widest uppercase font-bold ${theme === 'dark' ? 'bg-[#0a0a0f] border-[#ff6b35]/30' : 'bg-[#fdfbf7] border-[#ff6b35]/30'} focus:border-green-500`}
+                    maxLength={20}
+                  />
+                  <Button
+                    onClick={handleVerifyInvoice}
+                    disabled={verifyingInvoice || !invoiceNumber.trim()}
+                    className="bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-5 rounded-xl"
+                  >
+                    {verifyingInvoice ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <>
+                        <Video className="w-5 h-5 mr-2" />
+                        {language === 'gu' ? 'જોડાઓ' : language === 'hi' ? 'जुड़ें' : 'Join'}
+                      </>
+                    )}
+                  </Button>
+                </div>
 
-                    <p className={`text-xs mt-3 font-medium ${theme === 'dark' ? 'text-amber-500/80' : 'text-amber-600'}`}>
-                      <AlertCircle className="w-3.5 h-3.5 inline mr-1" />
-                      {language === 'gu' 
-                        ? 'તમારો ઇન્વૉઇસ નંબર પ્રોફાઇલ પેજમાં હશે, ત્યાંથી ચેક કરો.' 
-                        : language === 'hi' 
-                        ? 'आपका इनवॉइस नंबर प्रोफाइल पेज में होगा, वहां से चेक करें।' 
-                        : 'Your invoice number will be on the profile page, please check there.'}
-                    </p>
+                <p className={`text-xs mt-3 font-medium ${theme === 'dark' ? 'text-amber-500/80' : 'text-amber-600'}`}>
+                  <AlertCircle className="w-3.5 h-3.5 inline mr-1" />
+                  {language === 'gu'
+                    ? 'તમારો ઇન્વૉઇસ નંબર પ્રોફાઇલ પેજમાં હશે, ત્યાંથી ચેક કરો.'
+                    : language === 'hi'
+                      ? 'आपका इनवॉइस नंबर प्रोफाइल पेज में होगा, वहां से चेक करें।'
+                      : 'Your invoice number will be on the profile page, please check there.'}
+                </p>
 
-                  {invoiceError && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="text-red-500 text-sm mt-3"
-                    >
-                      {invoiceError}
-                    </motion.p>
-                  )}
+                {invoiceError && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-red-500 text-sm mt-3"
+                  >
+                    {invoiceError}
+                  </motion.p>
+                )}
 
-                  <div className={`mt-6 pt-6 border-t ${theme === 'dark' ? 'border-white/10' : 'border-[#ff6b35]/10'}`}>
-                    <p className={`text-xs ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'}`}>
-                      <MessageCircle className="w-4 h-4 inline mr-1 text-green-500" />
-                      {language === 'gu' 
-                        ? 'ઇન્વૉઇસ નંબર નથી મળ્યો? WhatsApp પર સંપર્ક કરો'
-                        : language === 'hi'
+                <div className={`mt-6 pt-6 border-t ${theme === 'dark' ? 'border-white/10' : 'border-[#ff6b35]/10'}`}>
+                  <p className={`text-xs ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'}`}>
+                    <MessageCircle className="w-4 h-4 inline mr-1 text-green-500" />
+                    {language === 'gu'
+                      ? 'ઇન્વૉઇસ નંબર નથી મળ્યો? WhatsApp પર સંપર્ક કરો'
+                      : language === 'hi'
                         ? 'इनवॉइस नंबर नहीं मिला? WhatsApp पर संपर्क करें'
                         : "Didn't receive the invoice number? Contact us on WhatsApp"}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
-        </section>
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
+      </section>
 
-        {/* Success Popup Dialog */}
-        <Dialog open={showSuccessPopup} onOpenChange={setShowSuccessPopup}>
-          <DialogContent className={`${theme === 'dark' ? 'bg-[#1a1a2e] border-[#ff6b35]/30' : 'bg-white border-[#ff6b35]/20'} max-w-md`}>
-            <DialogHeader className="text-center">
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", duration: 0.5 }}
-                className="w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-4"
-              >
-                <PartyPopper className="w-10 h-10 text-green-500" />
-              </motion.div>
-              <DialogTitle className={`font-[family-name:var(--font-cinzel)] text-2xl font-bold ${theme === 'dark' ? 'text-[#f5f0e8]' : 'text-[#4a3f35]'}`}>
-                {language === 'gu' ? 'ચુકવણી સફળ!' : language === 'hi' ? 'भुगतान सफल!' : 'Payment Successful!'}
-              </DialogTitle>
-              <DialogDescription className={`${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'} text-base`}>
-                {language === 'gu' 
-                  ? 'તમારી ચુકવણી સફળતાપૂર્વક ચકાસાઈ ગઈ છે. Google Meet સત્રમાં જોડાવા માટે નીચેના બટન પર ક્લિક કરો.'
-                  : language === 'hi'
+      {/* Success Popup Dialog */}
+      <Dialog open={showSuccessPopup} onOpenChange={setShowSuccessPopup}>
+        <DialogContent className={`${theme === 'dark' ? 'bg-[#1a1a2e] border-[#ff6b35]/30' : 'bg-white border-[#ff6b35]/20'} max-w-md`}>
+          <DialogHeader className="text-center">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className="w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-4"
+            >
+              <PartyPopper className="w-10 h-10 text-green-500" />
+            </motion.div>
+            <DialogTitle className={`font-[family-name:var(--font-cinzel)] text-2xl font-bold ${theme === 'dark' ? 'text-[#f5f0e8]' : 'text-[#4a3f35]'}`}>
+              {language === 'gu' ? 'ચુકવણી સફળ!' : language === 'hi' ? 'भुगतान सफल!' : 'Payment Successful!'}
+            </DialogTitle>
+            <DialogDescription className={`${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'} text-base`}>
+              {language === 'gu'
+                ? 'તમારી ચુકવણી સફળતાપૂર્વક ચકાસાઈ ગઈ છે. Google Meet સત્રમાં જોડાવા માટે નીચેના બટન પર ક્લિક કરો.'
+                : language === 'hi'
                   ? 'आपका भुगतान सफलतापूर्वक सत्यापित हो गया है। Google Meet सत्र में शामिल होने के लिए नीचे दिए गए बटन पर क्लिक करें।'
                   : 'Your payment has been verified successfully. Click the button below to join the Google Meet session.'}
-              </DialogDescription>
-            </DialogHeader>
-            
-            <div className="mt-6 space-y-4">
-              <Button
-                onClick={handleJoinMeet}
-                className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-6 rounded-xl text-lg"
-              >
-                <Video className="w-5 h-5 mr-2" />
-                {language === 'gu' ? 'Google Meet માં જોડાઓ' : language === 'hi' ? 'Google Meet से जुड़ें' : 'Join Google Meet'}
-                <ExternalLink className="w-4 h-4 ml-2" />
-              </Button>
-              
-              <p className={`text-xs text-center ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'}`}>
-                {language === 'gu' 
-                  ? 'નવી ટેબમાં Google Meet ખુલશે'
-                  : language === 'hi'
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="mt-6 space-y-4">
+            <Button
+              onClick={handleJoinMeet}
+              className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-6 rounded-xl text-lg"
+            >
+              <Video className="w-5 h-5 mr-2" />
+              {language === 'gu' ? 'Google Meet માં જોડાઓ' : language === 'hi' ? 'Google Meet से जुड़ें' : 'Join Google Meet'}
+              <ExternalLink className="w-4 h-4 ml-2" />
+            </Button>
+
+            <p className={`text-xs text-center ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'}`}>
+              {language === 'gu'
+                ? 'નવી ટેબમાં Google Meet ખુલશે'
+                : language === 'hi'
                   ? 'नई टैब में Google Meet खुलेगा'
                   : 'Google Meet will open in a new tab'}
-              </p>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
 
-        <section className={`py-20 px-6 ${theme === 'dark' ? 'bg-[#0f0f15]' : 'bg-[#f8f4ee]'}`}>
+      <section className={`py-20 px-6 ${theme === 'dark' ? 'bg-[#0f0f15]' : 'bg-[#f8f4ee]'}`}>
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -594,7 +594,7 @@ useEffect(() => {
 
           <div className="relative">
             <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-[#ff6b35]/20 hidden md:block" />
-            
+
             {currentHowItWorks.map((step, index) => (
               <motion.div
                 key={step.step}
@@ -616,7 +616,7 @@ useEffect(() => {
                     </CardContent>
                   </Card>
                 </div>
-                
+
                 <div className="absolute left-8 md:left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-[#ff6b35] flex items-center justify-center text-white font-bold text-lg z-10 hidden md:flex">
                   {step.step}
                 </div>
@@ -650,7 +650,7 @@ useEffect(() => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
               >
-                <Card 
+                <Card
                   className={`cursor-pointer ${theme === 'dark' ? 'bg-[#12121a] border-[#ff6b35]/20' : 'bg-white border-[#ff6b35]/10'} ${openFaq === index ? 'border-[#ff6b35]/40' : ''}`}
                   onClick={() => setOpenFaq(openFaq === index ? null : index)}
                 >
@@ -689,31 +689,30 @@ useEffect(() => {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className={`p-8 md:p-12 rounded-3xl text-center relative overflow-hidden ${
-              theme === 'dark' ? 'bg-gradient-to-br from-[#1a0a2e] to-[#0f1a2e] border border-[#ff6b35]/20' : 'bg-gradient-to-br from-[#fff5eb] to-[#ffe8d6] border border-[#ff6b35]/20'
-            }`}
+            className={`p-8 md:p-12 rounded-3xl text-center relative overflow-hidden ${theme === 'dark' ? 'bg-gradient-to-br from-[#1a0a2e] to-[#0f1a2e] border border-[#ff6b35]/20' : 'bg-gradient-to-br from-[#fff5eb] to-[#ffe8d6] border border-[#ff6b35]/20'
+              }`}
           >
             <div className="absolute -top-20 -right-20 w-64 h-64 bg-[#ff6b35]/10 rounded-full blur-3xl" />
             <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-[#ff8c5e]/10 rounded-full blur-3xl" />
-            
+
             <div className="relative z-10">
               <Sparkles className="w-12 h-12 text-[#ff6b35] mx-auto mb-6" />
               <h2 className="font-[family-name:var(--font-cinzel)] text-3xl md:text-4xl font-bold mb-4 text-gradient-ancient">
                 {language === 'gu' ? 'તમારી યાત્રા આજે જ શરૂ કરો' : language === 'hi' ? 'अपनी यात्रा आज ही शुरू करें' : 'Start Your Journey Today'}
               </h2>
               <p className={`text-lg mb-8 max-w-2xl mx-auto ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'}`}>
-                {language === 'gu' 
+                {language === 'gu'
                   ? 'તમારા જીવનના પ્રશ્નોના જવાબ વૈદિક જ્યોતિષના પ્રાચીન જ્ઞાનમાં છુપાયેલા છે.'
                   : language === 'hi'
-                  ? 'आपके जीवन के प्रश्नों के उत्तर वैदिक ज्योतिष के प्राचीन ज्ञान में छिपे हैं।'
-                  : "The answers to your life's questions lie hidden in the ancient wisdom of Vedic astrology."}
+                    ? 'आपके जीवन के प्रश्नों के उत्तर वैदिक ज्योतिष के प्राचीन ज्ञान में छिपे हैं।'
+                    : "The answers to your life's questions lie hidden in the ancient wisdom of Vedic astrology."}
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/booking">
-                  <Button 
+                  <Button
                     onClick={handleBookNow}
-                    size="lg" 
+                    size="lg"
                     className="bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-bold text-lg px-10 py-7 rounded-2xl shadow-xl shadow-[#ff6b35]/25"
                   >
                     <Calendar className="w-5 h-5 mr-2" />
@@ -721,13 +720,13 @@ useEffect(() => {
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                 </Link>
-                <a 
+                <a
                   href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Button 
-                    size="lg" 
+                  <Button
+                    size="lg"
                     variant="outline"
                     className="border-2 border-green-500 text-green-500 hover:bg-green-500/10 font-bold text-lg px-10 py-7 rounded-2xl"
                   >
