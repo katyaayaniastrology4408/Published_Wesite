@@ -25,6 +25,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "@/components/GoogleTranslateWidget";
 import Navbar from "@/components/homepage/Navbar";
+import { useOffer } from "@/hooks/useOffer";
 
 // Updated at 2026-03-03-T22:55
 const Footer = dynamic(() => import("@/components/homepage/Footer"), { 
@@ -86,6 +87,7 @@ export default function HomePageClient({ initialLatestPosts, hasTodayPosts, actu
   const [reviewStats, setReviewStats] = useState({ avgRating: "5.0", totalCount: 0 });
   const [latestPosts, setLatestPosts] = useState<LatestPost[]>(initialLatestPosts);
   const [newBlogBanner, setNewBlogBanner] = useState<{ show: boolean, post: LatestPost | null }>({ show: false, post: null });
+  const { offer, isOfferValid } = useOffer();
 
   useEffect(() => {
     setMounted(true);
@@ -389,16 +391,22 @@ export default function HomePageClient({ initialLatestPosts, hasTodayPosts, actu
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/booking" className="no-underline hover:no-underline">
                 <Button 
-                  onClick={handleBookClick}
+                  onClick={(e) => {
+                    if (!user) {
+                      showAuthModal('signin');
+                    } else if (isOfferValid && offer?.payment_link) {
+                      window.open(offer.payment_link, '_blank', 'noopener,noreferrer');
+                    } else {
+                      window.location.href = '/booking';
+                    }
+                  }}
                   size="lg" 
                   className="cursor-pointer bg-[#ff6b35] hover:bg-[#ff8c5e] hover:no-underline text-white font-semibold text-lg px-6 py-5 w-full sm:w-auto"
                 >
                   <Sparkles className="w-4 h-4 mr-2" />
                   {content.beginJourney}
                 </Button>
-              </Link>
               <Button 
                 onClick={() => showEnquiryModal()}
                 size="lg" 
@@ -469,15 +477,16 @@ export default function HomePageClient({ initialLatestPosts, hasTodayPosts, actu
           <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#ff6b35]/10 rounded-full blur-3xl" />
           <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-[#ff8c5e]/10 rounded-full blur-3xl" />
           
+
           <Sparkles className="w-7 h-7 text-[#ff6b35] mx-auto mb-3" />
-          
+
           <h3 className="font-[family-name:var(--font-cinzel)] text-xl font-bold mb-2 text-gradient-ancient">
             Unlock Your Destiny
           </h3>
           <p className={`mb-4 text-sm leading-relaxed ${theme === 'dark' ? 'text-[#c4bdb3]' : 'text-[#5a4f44]'}`}>
             Sign in for personalized horoscopes and premium cosmic insights.
           </p>
-          <Button 
+          <Button
             onClick={() => showAuthModal('signin')}
             className="w-full bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-bold py-5 rounded-xl text-base shadow-md shadow-[#ff6b35]/20 active:scale-95 transition-all"
           >

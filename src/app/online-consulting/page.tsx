@@ -25,6 +25,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import Navbar from "@/components/homepage/Navbar";
 import Footer from "@/components/homepage/Footer";
 import { PriceDisplay } from "@/components/PriceDisplay";
+import { useOffer } from "@/hooks/useOffer";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
@@ -138,6 +139,7 @@ export default function OnlineConsultingPage() {
   const [verifyingInvoice, setVerifyingInvoice] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [meetLink, setMeetLink] = useState("");
+  const { offer, isOfferValid } = useOffer();
 
   useEffect(() => {
     setMounted(true);
@@ -353,19 +355,24 @@ export default function OnlineConsultingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Link href="/booking">
-                <Button
-                  onClick={handleBookNow}
-                  size="lg"
-                  className="bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-bold text-lg px-8 py-6 rounded-2xl shadow-lg shadow-[#ff6b35]/25"
-                >
-                  <Video className="w-5 h-5 mr-2" />
-                  <span className="flex items-center gap-2">
-                    {language === 'gu' ? 'હવે બુક કરો -' : language === 'hi' ? 'अभी बुक करें -' : 'Book Now -'}
-                    <PriceDisplay amount={501} className="text-white relative top-[2px]" showBadge={false} showUrgency={false} />
-                  </span>
-                </Button>
-              </Link>
+              <button
+                onClick={(e) => {
+                  if (!user) {
+                    showAuthModal('signin');
+                  } else if (isOfferValid && offer?.payment_link) {
+                    window.open(offer.payment_link, '_blank', 'noopener,noreferrer');
+                  } else {
+                    router.push('/booking');
+                  }
+                }}
+                className="bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-bold text-lg px-8 py-6 rounded-2xl shadow-lg shadow-[#ff6b35]/25 flex items-center justify-center transition-all"
+              >
+                <Video className="w-5 h-5 mr-2" />
+                <span className="flex items-center gap-2">
+                  {language === 'gu' ? 'હવે બુક કરો -' : language === 'hi' ? 'अभी बुक करें -' : 'Book Now -'}
+                  <PriceDisplay amount={501} className="text-white relative top-[2px]" showBadge={false} showUrgency={false} />
+                </span>
+              </button>
               <a
                 href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`}
                 target="_blank"

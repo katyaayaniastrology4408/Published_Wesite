@@ -53,5 +53,13 @@ export function useOffer() {
       });
   }, []);
 
-  return { offer, isOfferValid, loading };
+  const handlePaymentRedirect = () => {
+    if (offer?.payment_link) {
+      // Use window.parent.postMessage pattern as seen in other components for cross-origin safety if needed,
+      // but a direct window.open or location.href is usually what's expected for external booking links.
+      window.open(offer.payment_link, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  return { offer, isOfferValid, loading, handlePaymentRedirect };
 }

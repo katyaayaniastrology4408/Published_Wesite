@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Clock, PartyPopper } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useOffer } from "@/hooks/useOffer";
 
 interface OfferSettings {
   is_active: boolean;
@@ -19,36 +20,21 @@ interface OfferSettings {
 }
 
 export function OfferPopup() {
-  const [offer, setOffer] = useState<OfferSettings | null>(null);
+  const { offer, isOfferValid, loading } = useOffer();
   const [isVisible, setIsVisible] = useState(false);
   const [timeLeft, setTimeLeft] = useState<{ d: number; h: number; m: number; s: number } | null>(null);
   const { theme } = useTheme();
 
   useEffect(() => {
-    fetch("/api/admin/offer")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.is_active) {
-            
-          const now = new Date();
-          const start = data.start_date ? new Date(data.start_date) : null;
-          const end = data.end_date ? new Date(data.end_date) : null;
-
-          // Check if offer is currently valid
-          if ((!start || now >= start) && (!end || now <= end)) {
-            setOffer(data);
-            
-            // Show popup if not dismissed in this session
-            const dismissed = sessionStorage.getItem("offer_popup_dismissed");
-            if (!dismissed) {
-              // Delay popup slightly for better UX
-              setTimeout(() => setIsVisible(true), 1500);
-            }
-          }
-        }
-      })
-      .catch(console.error);
-  }, []);
+    if (!loading && isOfferValid && offer) {
+      // Show popup if not dismissed in this session
+      const dismissed = sessionStorage.getItem("offer_popup_dismissed");
+      if (!dismissed) {
+        // Delay popup slightly for better UX
+        setTimeout(() => setIsVisible(true), 1500);
+      }
+    }
+  }, [loading, isOfferValid, offer]);
 
   // Countdown timer logic
   useEffect(() => {
@@ -142,12 +128,22 @@ export function OfferPopup() {
                   </div>
                 )}
 
-                <Link href="/booking" onClick={handleClose} className="block w-full group relative">
+                <button 
+                  onClick={() => {
+                    handleClose();
+                    if (offer.payment_link) {
+                      window.open(offer.payment_link, '_blank', 'noopener,noreferrer');
+                    } else {
+                      window.location.href = '/booking';
+                    }
+                  }} 
+                  className="block w-full group relative"
+                >
                     <div className="absolute inset-0 bg-yellow-400 rounded-xl blur opacity-40 group-hover:opacity-60 transition-opacity"></div>
-                    <button className="relative w-full bg-white text-[#ff4500] hover:bg-yellow-50 font-bold py-3.5 rounded-xl transition-all uppercase tracking-widest text-sm shadow-lg border border-white/50 active:scale-[0.98]">
+                    <div className="relative w-full bg-white text-[#ff4500] hover:bg-yellow-50 font-bold py-3.5 rounded-xl transition-all uppercase tracking-widest text-sm shadow-lg border border-white/50 active:scale-[0.98] flex items-center justify-center">
                         Book Now
-                    </button>
-                </Link>
+                    </div>
+                </button>
 
                 {offer.urgency_text && (
                   <p className="text-[10px] text-yellow-200 mt-4 font-semibold uppercase tracking-widest">

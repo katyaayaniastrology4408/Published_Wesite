@@ -13,6 +13,8 @@ import Footer from "@/components/homepage/Footer";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useTranslation } from "@/components/GoogleTranslateWidget";
 import { Button } from "@/components/ui/button";
+import { useOffer } from "@/hooks/useOffer";
+import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { PriceDisplay } from "@/components/PriceDisplay";
 import Link from "next/link";
@@ -148,6 +150,8 @@ export default function CitySEOPage() {
 
   const { theme } = useTheme();
   const { language, t } = useTranslation();
+  const { offer, isOfferValid } = useOffer();
+  const { user, showAuthModal } = useAuth();
 
   // Set document title for SEO on client side (since it's a client component)
   useEffect(() => {
@@ -201,11 +205,20 @@ export default function CitySEOPage() {
               {data.description}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link href="/booking">
-                <Button className="bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-bold px-8 py-7 rounded-full text-lg shadow-xl shadow-[#ff6b35]/20 group">
-                  <Sparkles className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" /> {t('Book Consultation Now')}
-                </Button>
-              </Link>
+              <Button 
+                onClick={() => {
+                  if (!user) {
+                    showAuthModal('signin');
+                  } else if (isOfferValid && offer?.payment_link) {
+                    window.open(offer.payment_link, '_blank', 'noopener,noreferrer');
+                  } else {
+                    router.push('/booking');
+                  }
+                }}
+                className="bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-bold px-8 py-7 rounded-full text-lg shadow-xl shadow-[#ff6b35]/20 group"
+              >
+                <Sparkles className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" /> {t('Book Consultation Now')}
+              </Button>
               <Link href="/contact">
                 <Button variant="outline" className="border-[#ff6b35] text-[#ff6b35] font-bold px-8 py-7 rounded-full text-lg hover:bg-[#ff6b35]/5">
                   {t('Enquire Now')}
@@ -306,11 +319,20 @@ export default function CitySEOPage() {
                     <span className="text-[#ff6b35] font-black">₹ 1,101+</span>
                   </div>
                 </div>
-                <Link href="/booking">
-                  <Button className="w-full bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-bold py-8 rounded-2xl text-xl shadow-lg shadow-[#ff6b35]/20 hover:scale-[1.02] transition-all">
-                    Start Your Reading
-                  </Button>
-                </Link>
+                <Button 
+                  onClick={() => {
+                    if (!user) {
+                      showAuthModal('signin');
+                    } else if (isOfferValid && offer?.payment_link) {
+                      window.open(offer.payment_link, '_blank', 'noopener,noreferrer');
+                    } else {
+                      router.push('/booking');
+                    }
+                  }}
+                  className="w-full bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-bold py-8 rounded-2xl text-xl shadow-lg shadow-[#ff6b35]/20 hover:scale-[1.02] transition-all"
+                >
+                  Start Your Reading
+                </Button>
                 <p className="text-center text-xs opacity-50 mt-4">100% Satisfaction Guaranteed</p>
               </CardContent>
             </Card>

@@ -13,6 +13,7 @@ import Footer from "@/components/homepage/Footer";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useTranslation } from "@/components/GoogleTranslateWidget";
 import { useAuth } from "@/contexts/AuthContext";
+import { useOffer } from "@/hooks/useOffer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -289,6 +290,7 @@ export default function ServicesPage() {
   const { language, t } = useTranslation();
   const { user, showAuthModal } = useAuth();
   const router = useRouter();
+  const { offer, isOfferValid } = useOffer();
 
   // Dynamic prices from DB
   const [dbPrices, setDbPrices] = useState<Record<string, { price_display: string; duration: string }>>({});
@@ -434,17 +436,23 @@ export default function ServicesPage() {
                           </div>
                         </div>
 
-                        <Link href="/booking">
-                          <Button
-                            onClick={handleBookNow}
-                            className="w-full md:w-auto bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-semibold text-xl px-8 py-6"
-                          >
-                            <Sparkles className="w-5 h-5 mr-2" />
-                            {language === 'hi' && 'अभी बुक करें'}
-                            {language === 'gu' && 'હવે બુક કરો'}
-                            {language === 'en' && 'Book Now'}
-                          </Button>
-                        </Link>
+                        <Button
+                          onClick={(e) => {
+                            if (!user) {
+                              showAuthModal('signin');
+                            } else if (service.title === "Online Consultation" && isOfferValid && offer?.payment_link) {
+                              window.open(offer.payment_link, '_blank', 'noopener,noreferrer');
+                            } else {
+                              router.push('/booking');
+                            }
+                          }}
+                          className="w-full md:w-auto bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-semibold text-xl px-8 py-6"
+                        >
+                          <Sparkles className="w-5 h-5 mr-2" />
+                          {language === 'hi' && 'अभी बुक करें'}
+                          {language === 'gu' && 'હવે બુક કરો'}
+                          {language === 'en' && 'Book Now'}
+                        </Button>
                       </div>
 
                       <div>
