@@ -362,7 +362,7 @@ export default function OnlineConsultingPage() {
                   <Video className="w-5 h-5 mr-2" />
                   <span className="flex items-center gap-2">
                     {language === 'gu' ? 'હવે બુક કરો -' : language === 'hi' ? 'अभी बुक करें -' : 'Book Now -'}
-                    <PriceDisplay amount={851} className="text-white relative top-[2px]" showBadge={false} showUrgency={false} />
+                    <PriceDisplay amount={501} className="text-white relative top-[2px]" showBadge={false} showUrgency={false} />
                   </span>
                 </Button>
               </Link>

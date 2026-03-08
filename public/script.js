@@ -275,7 +275,7 @@ if (bookingForm) {
                 booking_time: formData.preferredTime,
                 special_requests: formData.concerns,
                 payment_status: 'pending',
-                amount: formData.serviceType === 'home-outside' ? 2101 : formData.serviceType === 'home-within' ? 1101 : 851,
+                amount: formData.serviceType === 'home-outside' ? 2101 : formData.serviceType === 'home-within' ? 1101 : 501,
                 status: 'pending'
             })
         })

@@ -161,7 +161,7 @@ export default function BookingPage() {
 
     // Check if there is a site-wide special offer for online consulting and if the selected type matches its original price
     if (isOfferValid && offerSettings && offerSettings.is_active) {
-      // Assuming the offer is specifically on the base online consulting (original 851, offer 501)
+      // Assuming the offer is specifically on the base online consulting (original 501, offer 501)
       // You can expand this logic if the offer applies to other types like 'home-within' (1101 -> ?)
       if (selectedType === 'online' && selectedConsultation.price === (offerSettings.original_price * 100)) {
         return offerSettings.offer_price * 100;

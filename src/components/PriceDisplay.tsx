@@ -20,14 +20,14 @@ export function PriceDisplay({ amount, className = "", showBadge = true, showUrg
     return <span className={`font-black ${className}`}>₹ {amount}</span>;
   }
 
-  // Check if the amount passed is related to this offer (851 or 501)
+  // Check if the amount passed is related to this offer (501)
   const isTargetAmount = Number(amount) === offer.original_price || Number(amount) === offer.offer_price;
   
   if (!isTargetAmount) {
     return <span className={`font-black ${className}`}>₹ {amount}</span>;
   }
 
-  // Simply show the offer price prominently, removing the 851 strike-through
+  // Simply show the offer price prominently
   return (
     <div className="flex flex-col items-start gap-1">
       <div className="flex items-center gap-3 flex-wrap">

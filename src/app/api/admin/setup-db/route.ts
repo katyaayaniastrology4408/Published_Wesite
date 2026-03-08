@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS public.offer_settings (
     is_active BOOLEAN DEFAULT FALSE,
     start_date TIMESTAMPTZ,
     end_date TIMESTAMPTZ,
-    original_price NUMERIC DEFAULT 851,
+    original_price NUMERIC DEFAULT 501,
     offer_price NUMERIC DEFAULT 501,
     title TEXT DEFAULT '🎉 Special Festival Offer',
     urgency_text TEXT DEFAULT 'Only Few Slots Left',
