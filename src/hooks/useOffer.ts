@@ -23,15 +23,20 @@ export function useOffer() {
     // We append a timestamp to the URL to bypass Next.js client caching
     fetch(`/api/admin/offer?t=${new Date().getTime()}`)
       .then((res) => res.json())
-      .then((data) => {
-        if (data && data.is_active) {
-          const now = new Date();
-          const start = data.start_date ? new Date(data.start_date) : null;
-          const end = data.end_date ? new Date(data.end_date) : null;
+      .then((resData) => {
+        if (resData && resData.data) {
+          const data = resData.data;
+          if (data.is_active) {
+            const now = new Date();
+            const start = data.start_date ? new Date(data.start_date) : null;
+            const end = data.end_date ? new Date(data.end_date) : null;
 
-          if ((!start || now >= start) && (!end || now <= end) && (data.used_slots < data.max_slots)) {
-            setOffer(data);
-            setIsOfferValid(true);
+            if ((!start || now >= start) && (!end || now <= end) && (data.used_slots < data.max_slots)) {
+              setOffer(data);
+              setIsOfferValid(true);
+            } else {
+              setIsOfferValid(false);
+            }
           } else {
             setIsOfferValid(false);
           }
