@@ -63,8 +63,8 @@ const DEFAULT_CONSULTATION_TYPES = [
     title: { en: "Online Consultation", hi: "ऑनलाइन परामर्श", gu: "ઓનલાઈન પરામર્શ" },
     description: { en: "Connect with us from anywhere in the world via video call", hi: "वीडियो कॉल के माध्यम से दुनिया में कहीं से भी हमसे जुड़ें", gu: "વીડિયો કોલ દ્વારા વિશ્વના કોઈપણ સ્થળેથી અમારી સાથે જોડાઓ" },
     availability: { en: "Available everywhere", hi: "सभी जगह उपलब्ध", gu: "બધે ઉપલબ્ધ" },
-    price: 85100,
-    priceDisplay: "₹ 851",
+    price: 50100,
+    priceDisplay: "₹ 501",
     duration: { en: "45 minutes", hi: "45 मिनट", gu: "45 મિનિટ" },
     locationRestricted: false,
   }

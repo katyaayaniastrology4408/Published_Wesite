@@ -289,7 +289,7 @@ export default function OnlineConsultingPage() {
               </Link>
             </div>
             <div className={`mt-6 flex justify-center ${theme === 'dark' ? 'text-[#a0998c]' : 'text-[#75695e]'}`}>
-              <PriceDisplay amount={851} className="text-xl" showBadge={true} showUrgency={false} />
+              <PriceDisplay amount={501} className="text-xl" showBadge={true} showUrgency={false} />
               <span className="text-sm self-end mb-1 ml-1"> / 45 {language === 'gu' ? 'મિનિટ' : language === 'hi' ? 'मिनट' : 'minutes'}</span>
             </div>
           </motion.div>

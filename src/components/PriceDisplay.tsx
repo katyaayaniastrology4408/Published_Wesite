@@ -27,13 +27,10 @@ export function PriceDisplay({ amount, className = "", showBadge = true, showUrg
     return <span className={`font-black ${className}`}>₹ {amount}</span>;
   }
 
-  // Always show BOTH original (cut) and offer price for maximum impact
+  // Simply show the offer price prominently, removing the 851 strike-through
   return (
     <div className="flex flex-col items-start gap-1">
       <div className="flex items-center gap-3 flex-wrap">
-        <span className={`text-sm line-through decoration-red-500 decoration-2 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'} font-medium`}>
-          ₹{offer.original_price}
-        </span>
         <span className={`font-black text-[#ff6b35] ${className} drop-shadow-sm`}>
           ₹{offer.offer_price}
         </span>

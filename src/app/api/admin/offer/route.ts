@@ -25,7 +25,7 @@ export async function GET() {
                 is_active: true,
                 start_date: new Date().toISOString(),
                 end_date: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString(), // ~6 months
-                original_price: 851,
+                original_price: 501,
                 offer_price: 501,
                 title: "First 50 Users Special Offer",
                 urgency_text: "Only 50 Slots Available",
@@ -64,7 +64,7 @@ export async function GET() {
                     is_active: true,
                     start_date: new Date().toISOString(),
                     end_date: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString(),
-                    original_price: 851,
+                    original_price: 501,
                     offer_price: 501,
                     title: "First 50 Users Special Offer",
                     urgency_text: "Only 50 Slots Available",

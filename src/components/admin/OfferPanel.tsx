@@ -27,7 +27,7 @@ export default function OfferPanel({ isDark, t, setSuccess, setError }: any) {
     is_active: true,
     start_date: new Date().toISOString().slice(0, 16),
     end_date: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16),
-    original_price: 851,
+    original_price: 501,
     offer_price: 501,
     title: "First 50 Users Special Offer",
     urgency_text: "Only 50 Slots Available",

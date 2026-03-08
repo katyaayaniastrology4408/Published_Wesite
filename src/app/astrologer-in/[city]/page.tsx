@@ -296,7 +296,7 @@ export default function CitySEOPage() {
                       <Video className="w-5 h-5 text-[#ff6b35]" />
                       <span className="font-semibold">Online Session</span>
                     </div>
-                    <PriceDisplay amount={851} className="text-[#ff6b35] text-lg" showBadge={true} showUrgency={false} />
+                     <PriceDisplay amount={501} className="text-[#ff6b35] text-lg" showBadge={true} showUrgency={false} />
                   </div>
                   <div className="flex items-center justify-between p-4 rounded-xl bg-[#ff6b35]/5 border border-[#ff6b35]/10">
                     <div className="flex items-center gap-3">

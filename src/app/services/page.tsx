@@ -138,7 +138,7 @@ const services = [
     description: "Connect with us from anywhere in the world via video call. Get your our readings from the comfort of your home.",
     descriptionHi: "वीडियो कॉल के माध्यम से दुनिया में कहीं से भी हमसे जुड़ें। अपने घर के आराम से अपनी हमारे रीडिंग प्राप्त करें।",
     descriptionGu: "વીડિયો કોલ દ્વારા વિશ્વના કોઈપણ સ્થળેથી અમારી સાથે જોડાઓ. તમારા ઘરની આરામથી તમારી અમારા રીડિંગ્સ મેળવો.",
-    price: "851",
+    price: "501",
     duration: "45 minutes",
     durationHi: "45 मिनट",
     durationGu: "45 મિનિટ",
