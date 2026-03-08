@@ -17,8 +17,8 @@ import Footer from "@/components/homepage/Footer";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-key"
 );
 
 const RASHI_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -81,8 +81,15 @@ function RashifalPageContent() {
     const initialTab = searchParams.get('tab') === 'weekly' ? 'weekly' : 'daily';
 
     const [viewType] = useState<'daily' | 'weekly'>(initialTab);
-    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
-    const [selectedWeekStart, setSelectedWeekStart] = useState(() => getMonday(new Date()).toISOString().split('T')[0]);
+    const [selectedDate, setSelectedDate] = useState("");
+    const [selectedWeekStart, setSelectedWeekStart] = useState("");
+
+    useEffect(() => {
+      // Set dates on client to avoid hydration mismatch
+      const now = new Date();
+      setSelectedDate(now.toISOString().split('T')[0]);
+      setSelectedWeekStart(getMonday(now).toISOString().split('T')[0]);
+    }, []);
       const [selectedRashi, setSelectedRashi] = useState<string | null>(null);
       const [rashifalData, setRashifalData] = useState<RashifalData[]>([]);
       const [loading, setLoading] = useState(true);
@@ -183,7 +190,7 @@ function RashifalPageContent() {
   const selectedRashiData = selectedRashi ? getRashiData(selectedRashi) : null;
   const selectedRashiInfo = selectedRashi ? RASHI_DATA.find(r => r.english === selectedRashi) : null;
 
-  const todayMonday = getMonday(new Date()).toISOString().split('T')[0];
+  const todayMonday = selectedWeekStart; // Use the client-side calculated value
 
   return (
     <div className={`min-h-screen flex flex-col ${theme === 'dark' ? 'bg-[#0a0a0f] text-[#f5f0e8]' : 'bg-[#fdfbf7] text-[#4a3f35]'}`}>

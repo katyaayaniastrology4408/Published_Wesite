@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || "placeholder-key"
-);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co";
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "placeholder-key";
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const INDEXNOW_KEY = process.env.INDEXNOW_API_KEY || "a889b4f2a770404297f5fe6867c814f5";
 const SITE_URL = (process.env.NEXT_PUBLIC_APP_URL || "https://www.katyaayaniastrologer.com").replace(/\/$/, "");

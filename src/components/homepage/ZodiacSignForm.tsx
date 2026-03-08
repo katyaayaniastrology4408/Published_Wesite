@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useTranslation } from "@/components/GoogleTranslateWidget";
-import Sparkles from "lucide-react/dist/esm/icons/sparkles";
+import { Sparkles } from "lucide-react";
 import { calculatePanchang, PanchangData } from "@/lib/panchang";
 import { RASHI_ICONS } from "@/components/RashiIcons";
 

@@ -1,10 +1,9 @@
 "use client";
 
-import Lightbulb from "lucide-react/dist/esm/icons/lightbulb";
-import Star from "lucide-react/dist/esm/icons/star";
-import Quote from "lucide-react/dist/esm/icons/quote";
+import { Lightbulb, Star, Quote } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useTranslation } from "@/components/GoogleTranslateWidget";
+import { useState, useEffect } from "react";
 
 // ─── Static template data (replace with API/DB later) ────────────────────────
 
@@ -40,7 +39,7 @@ const tipData = {
       { title: "गुरु का आशीर्वाद", tip: "जब गुरु 11वें भाव में गोचर करे, लाभ और इच्छापूर्ति की अपेक्षा करें। स्पष्ट संकल्प लें और अप्रत्याशित रूपों में आशीर्वाद स्वीकार करें।", category: "ग्रह" },
       { title: "नवांश चार्ट के रहस्य", tip: "नवांश (D9) चार्ट आत्मा का उद्देश्य और वैवाहिक सामंजस्य प्रकट करता है। जन्म कुंडली के साथ हमेशा दोनों का अध्ययन करें।", category: "कुंडली" },
     ],
-    todayIndex: new Date().getDay() % 7,
+    todayIndex: 0,
     authorLabel: "— रुद्रम जोशी, कात्यायनी ज्योतिषी",
     categoryLabel: "आज का फोकस",
   },
@@ -57,7 +56,7 @@ const tipData = {
       { title: "ગુરુના આશીર્વાદ", tip: "ગુરુ 11મા ભાવમાં ગોચર કરે ત્યારે લાભ અને ઇચ્છા-પૂર્તિ અપેક્ષો. સ્પષ્ટ સંકલ્પ લો અને અણધારી રીતે આવતા આશીર્વાદ સ્વીકારો.", category: "ગ્રહ" },
       { title: "નવાંશ ચાર્ટના રહસ્ય", tip: "નવાંશ (D9) ચાર્ટ આત્માનો ઉદ્દેશ અને વૈવાહિક સૌહાર્દ દર્શાવે. હંમેશા બંને ચાર્ટ ભેગા અભ્યાસ કરો.", category: "કુંડળી" },
     ],
-    todayIndex: new Date().getDay() % 7,
+    todayIndex: 0,
     authorLabel: "— રુદ્રમ જોશી, કાત્યાયની જ્યોતિષ",
     categoryLabel: "આજનું ફોકસ",
   },
@@ -71,8 +70,15 @@ export default function AstrologerTip() {
   const isDark = theme === "dark";
 
   const lang = (language as "en" | "hi" | "gu") in tipData ? (language as "en" | "hi" | "gu") : "en";
+  const [todayIndex, setTodayIndex] = useState(0);
+
+  useEffect(() => {
+    // Set index on client to avoid hydration mismatch
+    setTodayIndex(new Date().getDay() % 7);
+  }, []);
+
   const content = tipData[lang];
-  const today = content.tips[content.todayIndex];
+  const today = content.tips[todayIndex];
 
   return (
     <section className={`py-20 px-6 ${isDark ? "bg-[#05030a]" : "bg-[#fff8f0]"}`}>

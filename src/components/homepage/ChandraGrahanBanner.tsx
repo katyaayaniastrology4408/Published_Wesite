@@ -1,12 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Moon from "lucide-react/dist/esm/icons/moon";
-import X from "lucide-react/dist/esm/icons/x";
-import ChevronDown from "lucide-react/dist/esm/icons/chevron-down";
-import ChevronUp from "lucide-react/dist/esm/icons/chevron-up";
-import AlertCircle from "lucide-react/dist/esm/icons/alert-circle";
-import ArrowRight from "lucide-react/dist/esm/icons/arrow-right";
+import { Moon, X, ChevronDown, ChevronUp, AlertCircle, ArrowRight } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useTranslation } from "@/components/GoogleTranslateWidget";
 import Link from "next/link";
