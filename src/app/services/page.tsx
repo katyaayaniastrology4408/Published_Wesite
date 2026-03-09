@@ -440,8 +440,8 @@ export default function ServicesPage() {
                           onClick={(e) => {
                             if (!user) {
                               showAuthModal('signin');
-                            } else if (service.title === "Online Consultation" && isOfferValid && offer?.payment_link) {
-                              window.open(offer.payment_link, '_blank', 'noopener,noreferrer');
+                            } else if (service.title === "Online Consultation") {
+                              window.open('https://urpy.link/D9kGay', '_blank', 'noopener,noreferrer');
                             } else {
                               router.push('/booking');
                             }

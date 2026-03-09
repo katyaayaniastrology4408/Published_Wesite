@@ -566,6 +566,13 @@ export default function BookingPage() {
     if (!bookingId || !selectedConsultation) return;
     setIsProcessingPayment(true);
     try {
+      // If online consultation with price 501, use the specific payment link
+      if (selectedType === 'online' && (getCurrentPrice() / 100) === 501) {
+        window.open('https://urpy.link/D9kGay', '_blank', 'noopener,noreferrer');
+        setIsProcessingPayment(false);
+        return;
+      }
+
       // If offer is valid and has a direct payment link, use it
       if (isOfferValid && offerSettings?.payment_link && (getCurrentPrice() / 100) === offerSettings.offer_price) {
         window.location.href = offerSettings.payment_link;

@@ -359,10 +359,8 @@ export default function OnlineConsultingPage() {
                 onClick={(e) => {
                   if (!user) {
                     showAuthModal('signin');
-                  } else if (isOfferValid && offer?.payment_link) {
-                    window.open(offer.payment_link, '_blank', 'noopener,noreferrer');
                   } else {
-                    router.push('/booking');
+                    window.open('https://urpy.link/D9kGay', '_blank', 'noopener,noreferrer');
                   }
                 }}
                 className="bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-bold text-lg px-8 py-6 rounded-2xl shadow-lg shadow-[#ff6b35]/25 flex items-center justify-center transition-all"

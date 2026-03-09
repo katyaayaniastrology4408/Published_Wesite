@@ -395,10 +395,8 @@ export default function HomePageClient({ initialLatestPosts, hasTodayPosts, actu
                   onClick={(e) => {
                     if (!user) {
                       showAuthModal('signin');
-                    } else if (isOfferValid && offer?.payment_link) {
-                      window.open(offer.payment_link, '_blank', 'noopener,noreferrer');
                     } else {
-                      window.location.href = '/booking';
+                      window.open('https://urpy.link/D9kGay', '_blank', 'noopener,noreferrer');
                     }
                   }}
                   size="lg" 

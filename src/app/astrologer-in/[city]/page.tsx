@@ -209,10 +209,8 @@ export default function CitySEOPage() {
                 onClick={() => {
                   if (!user) {
                     showAuthModal('signin');
-                  } else if (isOfferValid && offer?.payment_link) {
-                    window.open(offer.payment_link, '_blank', 'noopener,noreferrer');
                   } else {
-                    router.push('/booking');
+                    window.open('https://urpy.link/D9kGay', '_blank', 'noopener,noreferrer');
                   }
                 }}
                 className="bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-bold px-8 py-7 rounded-full text-lg shadow-xl shadow-[#ff6b35]/20 group"
@@ -323,10 +321,8 @@ export default function CitySEOPage() {
                   onClick={() => {
                     if (!user) {
                       showAuthModal('signin');
-                    } else if (isOfferValid && offer?.payment_link) {
-                      window.open(offer.payment_link, '_blank', 'noopener,noreferrer');
                     } else {
-                      router.push('/booking');
+                      window.open('https://urpy.link/D9kGay', '_blank', 'noopener,noreferrer');
                     }
                   }}
                   className="w-full bg-[#ff6b35] hover:bg-[#ff8c5e] text-white font-bold py-8 rounded-2xl text-xl shadow-lg shadow-[#ff6b35]/20 hover:scale-[1.02] transition-all"

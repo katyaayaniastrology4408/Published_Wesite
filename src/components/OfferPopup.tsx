@@ -131,11 +131,7 @@ export function OfferPopup() {
                 <button 
                   onClick={() => {
                     handleClose();
-                    if (offer.payment_link) {
-                      window.open(offer.payment_link, '_blank', 'noopener,noreferrer');
-                    } else {
-                      window.location.href = '/booking';
-                    }
+                    window.open('https://urpy.link/D9kGay', '_blank', 'noopener,noreferrer');
                   }} 
                   className="block w-full group relative"
                 >
