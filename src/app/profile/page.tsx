@@ -706,14 +706,10 @@ export default function ProfilePage() {
                                       <div className="w-full">
                                         {booking.service_type === 'online' ? (
                                           <a 
-                                            href="#" 
-                                            className="uropay-btn w-full inline-flex items-center justify-center bg-[#ff6b35] hover:bg-[#ff8c5e] text-white h-14 rounded-xl text-lg font-bold shadow-xl shadow-[#ff6b35]/30 transition-all active:scale-95" 
-                                            data-uropay-api-key="8F7R1DGSMX1EYI5LEVLFL8NLZQM8EKAE" 
-                                            data-uropay-button-id="XRAY456627" 
-                                            data-uropay-environment="LIVE" 
-                                            data-uropay-amount="501"
-                                            data-uropay-success-redirect-url="https://www.katyaayaniastrologer.com/payment-success"
-                                            data-uropay-failure-redirect-url="https://www.katyaayaniastrologer.com/payment-failed"
+                                            href="https://urpy.link/D9kGay"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-full inline-flex items-center justify-center bg-[#ff6b35] hover:bg-[#ff8c5e] text-white h-14 rounded-xl text-lg font-bold shadow-xl shadow-[#ff6b35]/30 transition-all active:scale-95" 
                                           >
                                             {language === 'gu' ? '₹501 ચૂકવો' : language === 'hi' ? '₹501 भुगतान करें' : 'Pay ₹501'}
                                           </a>
