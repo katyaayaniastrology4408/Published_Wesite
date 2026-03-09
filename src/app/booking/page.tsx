@@ -957,19 +957,30 @@ export default function BookingPage() {
                             {isOfferValid && offerSettings && offerSettings.is_active && (
                               <p className="text-xs font-bold text-red-500 mb-2 animate-pulse">{offerSettings.urgency_text}</p>
                             )}
-                            <a
-                              href="#"
-                              className="uropay-btn w-full inline-flex items-center justify-center bg-[#ff6b35] hover:bg-[#ff8c5e] text-white h-16 rounded-2xl text-xl font-bold shadow-xl shadow-[#ff6b35]/30 transition-all active:scale-95"
-                              data-uropay-api-key="8F7R1DGSMX1EYI5LEVLFL8NLZQM8EKAE"
-                              data-uropay-button-id="XRAY456627"
-                              data-uropay-environment="LIVE"
-                              data-uropay-amount={getCurrentPrice() / 100}
-                              data-uropay-callback-url="/api/payments/callback"
-                              data-uropay-success-url="/payment-success"
-                              data-uropay-failure-url="/payment-failed"
-                            >
-                              {language === 'gu' ? `₹${getCurrentPrice() / 100} માટે હમણાં ખરીદો` : language === 'hi' ? `₹${getCurrentPrice() / 100} के लिए अभी खरीदें` : `Buy Now for ₹${getCurrentPrice() / 100}`}
-                            </a>
+                            {(getCurrentPrice() / 100) === 501 ? (
+                              <a
+                                href="https://urpy.link/D9kGay"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full inline-flex items-center justify-center bg-[#ff6b35] hover:bg-[#ff8c5e] text-white h-16 rounded-2xl text-xl font-bold shadow-xl shadow-[#ff6b35]/30 transition-all active:scale-95"
+                              >
+                                {language === 'gu' ? `₹${getCurrentPrice() / 100} માટે હમણાં ખરીદો` : language === 'hi' ? `₹${getCurrentPrice() / 100} के लिए अभी खरीदें` : `Buy Now for ₹${getCurrentPrice() / 100}`}
+                              </a>
+                            ) : (
+                              <a
+                                href="#"
+                                className="uropay-btn w-full inline-flex items-center justify-center bg-[#ff6b35] hover:bg-[#ff8c5e] text-white h-16 rounded-2xl text-xl font-bold shadow-xl shadow-[#ff6b35]/30 transition-all active:scale-95"
+                                data-uropay-api-key="8F7R1DGSMX1EYI5LEVLFL8NLZQM8EKAE"
+                                data-uropay-button-id="XRAY456627"
+                                data-uropay-environment="LIVE"
+                                data-uropay-amount={getCurrentPrice() / 100}
+                                data-uropay-callback-url="/api/payments/callback"
+                                data-uropay-success-url="/payment-success"
+                                data-uropay-failure-url="/payment-failed"
+                              >
+                                {language === 'gu' ? `₹${getCurrentPrice() / 100} માટે હમણાં ખરીદો` : language === 'hi' ? `₹${getCurrentPrice() / 100} के लिए अभी खरीदें` : `Buy Now for ₹${getCurrentPrice() / 100}`}
+                              </a>
+                            )}
                           </div>
                         ) : selectedType === 'home-within' ? (
                           <div className="flex justify-center">
